@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="~{admin/fragments :: head(title='Gestión de Consultas')}"></head>
+
+<body style="background: #f8f9fa;">
+
+	<div class="admin-wrapper">
+
+		<nav th:replace="~{admin/fragments :: admin-sidebar}"></nav>
+
+		<div class="admin-content">
+			<div class="container-fluid py-4">
+
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<h2 class="fw-bold" style="color: var(--deep-love);">
+						<i class="bi bi-person-workspace me-2"></i>lista usuarios
+					</h2>
+					<div class="d-flex gap-2">
+						<span
+							class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm">
+							<i class="bi bi-envelope-paper me-1"></i> <span
+							th:text="${#lists.size(usuarios)}">0</span> Usuarios
+						</span> <a href="/productos"
+							class="btn btn-outline-secondary btn-sm rounded-pill shadow-sm">Ver
+							Sitio Público</a>
+					</div>
+				</div>
+
+				<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+					<div class="table-responsive">
+						<table class="table table-hover align-middle mb-0">
+							<thead class="table-dark">
+								<tr>
+
+									<th>id</th>
+									<th>usuario</th>
+									<th>accion</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="c : ${usuarios}">
+
+									<td>
+										<div class="fw-bold text-dark" th:text="${c.id}">id</div>
+
+									</td>
+									<td>
+
+										<div class="small text-muted" th:text="${c.username}">usuario</div>
+									</td>
+									<td class="text-center">
+										<div class="btn-group">
+											
+											<a
+												th:href="@{/admin/usuarios/eliminar/{id}(id=${c.id})}"
+												class="btn btn-danger"
+												onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
+												Eliminar </a>
+										</div>
+									</td>
+
+
+								</tr>
+								<tr th:if="${#lists.isEmpty(usuarios)}">
+									<td colspan="5" class="text-center py-5 text-muted italic">
+										<i class="bi bi-inbox fs-1 d-block mb-2"></i> No se han
+										registrados usuarios
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

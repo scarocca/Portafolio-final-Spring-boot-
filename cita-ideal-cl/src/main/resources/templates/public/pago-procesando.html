@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Procesando Pago | CitaIdeal.cl</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .loader-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+        }
+        .spinner-heart {
+            color: #d62d75; /* El color característico de tu marca */
+            width: 3.5rem;
+            height: 3.5rem;
+            border-width: 0.25em;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container text-center">
+        <div class="spinner-border spinner-heart mb-4" role="status">
+            <span class="visually-hidden">Procesando...</span>
+        </div>
+        
+        <h3 class="fw-bold text-dark">Validando transacción con tu banco</h3>
+        <p class="text-muted">Estamos confirmando tu Cita Ideal, por favor espera un momento...</p>
+
+       <form id="formFinal" 
+      th:action="${esCarrito} ? @{/reservas/confirmar-todo} : @{/reservas/guardar}" 
+      method="post" 
+      style="display:none;">
+    
+    <input th:if="${planId != null}" type="hidden" name="planId" th:value="${planId}">
+    
+    <input type="hidden" name="fechaSolo" th:value="${fechaSolo}">
+    <input type="hidden" name="horaFija" th:value="${horaFija}">
+    
+    <input type="hidden" name="nombreCliente" th:value="${reserva.nombreCliente}">
+    <input type="hidden" name="emailCliente" th:value="${reserva.emailCliente}">
+    <input type="hidden" name="telefonoCliente" th:value="${reserva.telefonoCliente}">
+</form>
+    </div>
+
+    
+
+    <script>
+        // Simulamos el retraso de la red bancaria (3 segundos)
+        window.onload = function() {
+            setTimeout(() => {
+                console.log("Pago validado. Guardando reserva...");
+                document.getElementById('formFinal').submit();
+            }, 3000);
+        };
+    </script>
+</body>
+</html>

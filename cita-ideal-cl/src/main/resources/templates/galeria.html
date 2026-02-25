@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Galería de Momentos | CitaIdeal</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+	<link rel="stylesheet" th:href="@{/assets/css/base.css}">
+<link rel="stylesheet" th:href="@{/assets/css/layout.css}">
+<link rel="stylesheet" th:href="@{/assets/css/animations.css}">
+<link rel="stylesheet" th:href="@{/assets/css/components.css}">
+<link rel="stylesheet" th:href="@{/assets/css/login.css}">
+<link rel="stylesheet" th:href="@{/assets/css/galeria.css}">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+
+	<header class="gallery-fotos text-center py-5">
+		<h1 class="display-4 fw-bold" style="color: var(--deep-love);">Nuestra
+			Galería de Sueños</h1>
+		<p class="lead text-muted">Cada detalle está diseñado para crear
+			recuerdos inolvidables.</p>
+
+		<div class="mt-4">
+			<a th:href="@{/}"
+				class="btn btn-outline-secondary rounded-pill px-4 shadow-sm"> <i
+				class="bi bi-arrow-left me-2"></i> Volver al Inicio
+			</a>
+		</div>
+
+		<div class="heart-divider mt-4">
+			<i class="bi bi-heart-fill"></i>
+		</div>
+	</header>
+
+	<main class="container mb-5">
+		<div class="row g-4">
+			<div class="col-6 col-md-4 col-lg-3" th:each="foto : ${fotos}">
+				<div class="gallery-item shadow-sm" data-aos="flip-left" data-aos-duration="1000">
+					<img th:src="@{'/assets/img/galeria/' + ${foto.archivo}}"
+						class="img-fluid rounded-4" th:alt="${foto.titulo}">
+					<div class="gallery-overlay rounded-4">
+						<span class="gallery-caption" th:text="${foto.titulo}">Cena
+							Romántica</span>
+					</div>
+				</div>
+			</div>
+
+			<div th:if="${#lists.isEmpty(fotos)}" class="text-center py-5">
+				<p class="text-muted italic">Pronto compartiremos más momentos
+					especiales...</p>
+			</div>
+		</div>
+		
+	</main>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
+<div class="background-container">
+  <span class="element">❤️</span>
+  <span class="element">🌹</span>
+  <span class="element">❤️</span>
+  <span class="element">🌹</span>
+  <span class="element">❤️</span>
+</div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+.login-card-rosa {
+    /* Rosa pastel muy suave con transparencia */
+    background-color: rgba(255, 240, 245, 0.85) !important;
+    
+    /* Efecto de desenfoque para que el celeste del fondo se vea difuminado */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    /* Borde suave para dar definición */
+    border: 1px solid rgba(248, 187, 208, 0.4) !important;
+    
+    /* Sombra suave */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
+}
+.login-card-rosa .form-control {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(248, 187, 208, 0.5);
+    border-radius: 10px;
+}
+.login-card-rosa .form-control:focus {
+    border-color: var(--deep-love);
+    box-shadow: 0 0 0 0.25rem rgba(173, 20, 87, 0.1);
+}
+.login-card-rosa a {
+    color: var(--deep-love);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+.login-card-rosa a:hover {
+    text-decoration: underline;
+    color: #880e4f;
+}
+.login-card-rosa .d-grid {
+    margin-bottom: 1.2rem; /* Separación entre cada campo */
+}
+.login-card-rosa label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #5d4037;
+    margin-bottom: 5px; /* Espacio entre label e input */
+}
+.login-card-rosa .gap-2 {
+    gap: 1rem !important;
+    margin-top: 10px;
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.planes-wrapper {
+    max-width: 1100px; 
+    margin: 0 auto;
+}
+.corazon {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    animation: flotar 4s ease-out forwards;
+    z-index: 1; /* Por detrás del texto */
+}
+
+@keyframes flotar {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        /* Suben mientras se hacen pequeños y giran */
+        transform: translateY(-200px) scale(0.5) rotate(45deg);
+        opacity: 0;
+    }
+}
+.element {
+  position: absolute;
+  bottom: -50px;
+  font-size: 24px;
+  user-select: none;
+  opacity: 0; /* Empiezan invisibles */
+  /* Aquí aplicamos la nueva animación de rotación y bamboleo */
+  animation: floatUpAndRotate 15s ease-in-out infinite;
+}
+
+/* 3. REEMPLAZA tu @keyframes anterior por este nuevo */
+@keyframes floatUpAndRotate {
+  0% {
+    transform: translateY(0) rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  50% {
+    /* En la mitad del camino, rotó 180 grados y se movió a la derecha */
+    transform: translateY(-50vh) rotate(180deg) translateX(25px);
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    /* Termina arriba con rotación completa y un leve movimiento a la izquierda */
+    transform: translateY(-110vh) rotate(360deg) translateX(-15px);
+    opacity: 0;
+  }
+}
+
+/* 4. Variaciones de tiempo (puedes mantener estas o ajustarlas) */
+.element:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
+.element:nth-child(2) { left: 30%; animation-delay: 4s; animation-duration: 22s; }
+.element:nth-child(3) { left: 50%; animation-delay: 8s; animation-duration: 15s; }
+.element:nth-child(4) { left: 70%; animation-delay: 2s; animation-duration: 25s; }
+.element:nth-child(5) { left: 90%; animation-delay: 6s; animation-duration: 19s; }
+/* Animación del corazón */
+.bi-heart-fill {
+    display: inline-block; /* Necesario para que la animación funcione */
+    color: rgb(255, 0, 255) !important;
+    animation: latido 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+}
+
+@keyframes latido {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+    100% { transform: scale(1); }
+}
+.rosas-animadas {
+    position: absolute; /* O fixed si quieres que floten */
+    z-index: 10; /* El nivel más alto para tapar el navbar */
+}
+/* 1. El contenedor es el que hace TODO el viaje */
+#contenedor-avion {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;              /* Alinea mensaje e imagen en fila */
+    align-items: center;
+    pointer-events: none;       /* No bloquea clics en el menú */
+    z-index: 10;
+    white-space: nowrap;
+    /* 30 segundos para que sea legible y elegante */
+    animation: volar 15s linear infinite; 
+}
+
+/* 2. El avión (va a la derecha del mensaje) */
+#imagen-avion {
+    height: 30px;               /* Tamaño discreto para el navbar */
+    width: auto;
+    display: block;
+}
+
+/* 3. El mensaje (va a la izquierda del avión) */
+#mensaje-avion {
+    background-color: #fdf5e6;
+    padding: 3px 10px;
+    border: 1px solid #8b4513;
+    border-right: 4px solid #555; /* El "cordel" que lo une al avión */
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: #5d4037;
+    margin-right: -2px;          /* Pegado al avión */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    
+    /* Efecto de movimiento de tela */
+    animation: ondular 1.2s ease-in-out infinite alternate;
+}
+
+/* --- ANIMACIONES --- */
+
+@keyframes volarLento {
+    0% { 
+        left: -600px;           /* Empieza bien afuera a la izquierda */
+    }
+    100% { 
+        left: 110vw;            /* Desaparece por completo a la derecha */
+    }
+}
+
+@keyframes ondular {
+    from { transform: rotate(1.5deg); }
+    to { transform: rotate(-1.5deg); }
+}

@@ -1,0 +1,44 @@
+:root {
+    
+    --ocean-blue: #4db6ac;
+    --deep-love: #ad1457;
+    --soft-cream: #fff9fb;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+   
+    background:linear-gradient(180deg, rgb(110, 191, 245) 0%, #e0f4ff 100%) !important;
+    background-attachment: fixed !important; /* Mantiene el fondo estático al scrollear */
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333; /* Un color oscuro para que sea legible sobre el fondo claro */
+    margin: 0;
+    overflow-x: hidden;
+
+}
+.admin-content,
+.admin-wrapper,
+section, 
+main {
+    background: transparent !important;
+    background-image: none !important;
+    border: none !important;
+}
+.payment-card {
+	max-width: 450px;
+	border: none;
+	border-radius: 15px;
+}
+
+.chip {
+	width: 50px;
+	height: 40px;
+	background: #ffd700;
+	border-radius: 8px;
+}

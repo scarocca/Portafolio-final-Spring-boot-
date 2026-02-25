@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title th:text="'Login - Tu Cita Ideal'"></title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet" th:href="@{/assets/css/base.css}">
+<link rel="stylesheet" th:href="@{/assets/css/layout.css}">
+<link rel="stylesheet" th:href="@{/assets/css/animations.css}">
+<link rel="stylesheet" th:href="@{/assets/css/components.css}">
+<link rel="stylesheet" th:href="@{/assets/css/login.css}">
+
+<style>
+/* Aseguramos que el contenido ocupe el alto restante sin centrar el nav */
+.login-wrapper {
+	min-height: calc(100vh - 56px);
+	/* 100vh menos la altura aprox del nav */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+</style>
+</head>
+<body class="bg-light">
+
+	<nav
+		class="navbar navbar-light sticky-top navbar-cielo shadow-sm w-100 bg-white">
+		<div id="contenedor-avion">
+			<div id="mensaje-avion">
+				<span>"Contigo, el camino es el destino." ❤️</span>
+			</div>
+			<img th:src="@{/assets/img/avion-de-papel.png}" id="imagen-avion"
+				alt="Avión">
+		</div>
+		<div class="container">
+			<a class="navbar-brand fw-bold" th:href="@{/}"
+				style="color: #D4AF37;"> <i class="bi bi-heart-fill me-2"></i>TuCitaIdeal
+			</a>
+		</div>
+	</nav>
+	<div th:if="${mensajeExito}"
+						class="alert alert-success alert-dismissible fade show rounded-pill px-4"
+						role="alert">
+						<i class="bi bi-check-circle-fill me-2"></i> <span
+							th:text="${mensajeExito}"></span>
+						<button type="button" class="btn-close" data-bs-dismiss="alert"
+							aria-label="Close"></button>
+					</div>
+
+
+	<div class="container login-wrapper">
+		<div class="row justify-content-center w-100">
+			<div class="col-md-5 col-lg-4">
+				<div class="card border-0 shadow-lg rounded-4 p-4 login-card-rosa">
+					<div class="text-center mb-4">
+						<h3 class="fw-bold" style="color: #D4AF37;">Bienvenido A Tu
+							Cita Ideal</h3>
+						<p class="text-muted small">Ingresa usuario y contraseña para
+							iniciar sesión</p>
+					</div>
+
+					<div th:if="${param.error}"
+						class="alert alert-danger py-2 small text-center">Usuario o
+						contraseña incorrectos.</div>
+
+					<div th:if="${param.logout}"
+						class="alert alert-info py-2 small text-center">Has cerrado
+						sesión correctamente.</div>
+						
+					
+
+					<form th:action="@{/login}" method="post">
+						<div class="mb-3">
+							<label class="form-label small fw-bold">Usuario</label> <input
+								type="text" name="username" class="form-control" required
+								autofocus>
+						</div>
+						<div class="mb-4">
+							<label class="form-label small fw-bold">Contraseña</label> <input
+								type="password" name="password" class="form-control" required>
+						</div>
+						<div class="d-grid">
+							<button type="submit" class="btn btn-romance shadow-sm">Iniciar
+								Sesión</button>
+						</div>
+					</form>
+
+					<hr>
+					<div class="text-center">
+						<a th:href="@{/registro}" class="text-decoration-none small">¿No
+							tienes cuenta? Regístrate aquí</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="background-container">
+		<span class="element">❤️</span> <span class="element">🌹</span> <span
+			class="element">❤️</span> <span class="element">🌹</span>
+	</div>
+<script th:src="@{/assets/js/scroll-reveal.js}"></script>
+</body>
+</html>

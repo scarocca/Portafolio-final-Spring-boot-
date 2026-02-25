@@ -1,0 +1,30 @@
+.navbar-cielo {
+    /* Usamos el mismo azul de tu body */
+   background:linear-gradient(180deg, rgb(110, 191, 245) 0%, #e0f4ff 100%) !important;
+    
+    /* Efecto cristal para que se vea premium */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    /* Una línea sutil abajo en lugar de sombra pesada */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Ajuste para que los iconos y textos se vean bien sobre el azul */
+.navbar-cielo .text-white, 
+.navbar-cielo .bi {
+    color: white !important;
+}
+
+/* El nombre de la marca en el Dorado que te gusta */
+.navbar-cielo .navbar-brand {
+    color: #D4AF37 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el nombre del usuario en el hola */
+.navbar-cielo .bienvenida span {
+    color: #D4AF37 !important;
+    font-weight: 600;
+}

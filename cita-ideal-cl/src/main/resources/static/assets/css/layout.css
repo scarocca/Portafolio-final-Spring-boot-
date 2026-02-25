@@ -1,0 +1,77 @@
+.navbar-cielo {
+    /* Usamos el mismo azul de tu body */
+   background:linear-gradient(180deg, rgb(110, 191, 245) 0%, #e0f4ff 100%) !important;
+    
+    /* Efecto cristal para que se vea premium */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative; /* Necesario para que respete el z-index */
+    z-index: 5;
+    
+    /* Una línea sutil abajo en lugar de sombra pesada */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Ajuste para que los iconos y textos se vean bien sobre el azul */
+.navbar-cielo .text-white, 
+.navbar-cielo .bi {
+    color: white !important;
+}
+
+/* El nombre de la marca en el Dorado que te gusta */
+.navbar-cielo .navbar-brand {
+    color: #D4AF37 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el nombre del usuario en el hola */
+.navbar-cielo .bienvenida span {
+    color: #D4AF37 !important;
+    font-weight: 600;
+}
+.bienvenida p {
+    color: white !important;
+    font-weight: 400;
+    font-size: 0.95rem;
+}
+
+.bienvenida p span {
+    color: #D4AF37 !important; /* El nombre del usuario resalta en dorado */
+    font-weight: 700;
+    margin-left: 4px;
+}
+.bienvenida {
+    margin: 30px 0;
+    padding: 10px 0;
+    text-align: left; /* O center, según tu header */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Línea divisoria casi invisible */
+}
+
+/* El texto general */
+.bienvenida p {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    color: #6c757d; /* Gris suave, menos agresivo que el negro */
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+/* El nombre del usuario: El único punto de color */
+.bienvenida p span {
+    color: #e63946; /* Un rojo más vibrante pero fino */
+    font-weight: 600;
+    margin-left: 5px;
+    position: relative;
+}
+
+/* Un detalle sutil: un punto decorativo al final */
+.bienvenida p::after {
+    content: ' •';
+    color: #ffb4a2; /* Rosa pastel muy suave */
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+.footer{
+	 background:linear-gradient(180deg, rgb(110, 191, 245) 0%, #e0f4ff 100%) !important;
+}

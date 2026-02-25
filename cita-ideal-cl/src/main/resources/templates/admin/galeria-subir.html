@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head(title='Gestión de Consultas')}"></head>
+    </head>
+<body class="bg-light">
+    <div class="admin-wrapper">
+         <nav th:replace="~{admin/fragments :: admin-sidebar}"></nav>
+        
+<div class="admin-content">
+	<div class="row justify-content-center">
+		<div class="col-md-8">
+			<h2 class="fw-bold mb-4" style="color: var(--deep-love);">Nueva
+				Foto</h2>
+
+			<div class="card shadow-sm border-0 rounded-4">
+				<div class="card-body p-4">
+					<form th:action="@{/admin/galeria/guardar}" method="post"
+						enctype="multipart/form-data">
+						<div class="mb-3">
+							<label class="form-label">Título de la Imagen</label> <input
+								type="text" name="titulo" class="form-control"
+								placeholder="Ej: Cena a la luz de las velas" required>
+						</div>
+
+						<div class="mb-3">
+							<label class="form-label">Seleccionar Archivo</label> <input
+								type="file" name="archivoImagen" class="form-control"
+								accept="image/*" required>
+							<div class="form-text">Formatos permitidos: JPG, PNG.
+								Máximo 2MB.</div>
+						</div>
+
+						<button type="submit" class="btn btn-primary rounded-pill px-4">
+							<i class="bi bi-cloud-upload me-2"></i>Subir a la Galería
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+</div>
+</body>
+</html>

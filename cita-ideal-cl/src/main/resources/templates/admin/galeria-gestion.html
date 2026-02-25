@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="~{admin/fragments :: head(title='Gestión de Galería')}">
+</head>
+<body class="bg-light">
+	<div class="admin-wrapper">
+		<nav th:replace="~{admin/fragments :: admin-sidebar}"></nav>
+		<div class="admin-content">
+			<div class="d-flex justify-content-between align-items-center mb-4">
+				<h2>Gestión de Galería de Fotos</h2>
+				<a th:href="@{/admin/galeria/nuevo}"
+					class="btn btn-primary rounded-pill shadow-sm"> <i
+					class="bi bi-plus-circle me-2"></i>Subir Nueva Foto
+				</a>
+			</div>
+			<div class="container-fluid py-4">
+				<div class="card shadow-sm border-0 rounded-4">
+					<div class="card-body p-0">
+						<table class="table table-hover align-middle mb-0">
+							<thead class="bg-light">
+								<tr>
+									<th class="ps-4">Miniatura</th>
+									<th>Título</th>
+									<th>Nombre del Archivo</th>
+									<th>Fecha de Carga</th>
+									<th class="text-end pe-4">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="foto : ${fotos}">
+									<td class="ps-4">
+										<div class="img-thumbnail-wrapper">
+											<img th:src="@{'/assets/img/galeria/' + ${foto.archivo}}"
+												class="img-thumbnail-admin"
+												style="width: 80px; height: 50px; object-fit: cover;">
+										</div>
+									</td>
+									<td th:text="${foto.titulo}" class="fw-bold"></td>
+									<td><code class="small" th:text="${foto.archivo}"></code></td>
+									<td
+										th:text="${#temporals.format(foto.fechaCarga, 'dd/MM/yyyy HH:mm')}"></td>
+									<td class="text-end pe-4"><a
+										th:href="@{/admin/galeria/eliminar/{id}(id=${foto.id})}"
+										class="btn btn-outline-danger btn-sm rounded-circle"
+										onclick="return confirm('¿Estás seguro de que deseas eliminar esta imagen del servidor?')">
+											<i class="bi bi-trash"></i>
+									</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

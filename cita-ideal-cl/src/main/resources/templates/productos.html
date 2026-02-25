@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments :: head('Productos')}"></head>
+<body>
+	<nav
+		class="navbar navbar-expand-lg navbar-light fixed-top navbar-cielo">
+		<div class="container d-flex align-items-center">
+			<a class="navbar-brand fw-bold" href="/" style="color: #D4AF37;">
+				<i class="bi bi-heart-fill me-2"></i>TuCitaIdeal
+			</a>
+
+			<div class="ms-auto d-flex align-items-center">
+
+				<div class="bienvenida me-3" sec:authorize="hasRole('ADMIN')">
+					<p class="mb-0">
+						Hola, <span th:text="${#authentication.name}">Usuario</span>
+					</p>
+				</div>
+
+				<div class="bienvenida me-3" sec:authorize="hasRole('USER')">
+					<p class="mb-0">
+						Hola, <span th:text="${#authentication.name}">Usuario</span>
+					</p>
+				</div>
+
+				<a href="/admin/planes" sec:authorize="hasRole('ADMIN')"
+					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
+				</a> <a href="/carrito/ver" sec:authorize="hasRole('USER')"
+					class="btn btn-link text-dark position-relative p-0"> <i
+					class="bi bi-cart-fill fs-5"></i> <span
+					class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+					style="font-size: 0.6rem;" th:text="${itemsCount}"> 0 </span>
+				</a>
+				<div class="ms-auto">
+					<a th:href="@{/login}" sec:authorize="isAnonymous()"
+						class="btn btn-outline-light px-4 shadow-sm"> <i
+						class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+					</a>
+				</div>
+				<form sec:authorize="isAuthenticated()" th:action="@{/logout}"
+					method="post">
+					<button type="submit" class="btn btn-link btn-sm text-muted">Cerrar
+						Sesión</button>
+				</form>
+
+			</div>
+		</div>
+	</nav>
+
+
+	<div class="container my-5">
+		<div th:if="${mensajeExito}"
+			class="alert alert-success alert-dismissible fade show" role="alert">
+			<i class="bi bi-check-circle-fill me-2"></i> <span
+				th:text="${mensajeExito}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+
+		<div th:if="${mensajeError}"
+			class="alert alert-danger alert-dismissible fade show" role="alert">
+			<i class="bi bi-exclamation-triangle-fill me-2"></i> <span
+				th:text="${mensajeError}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+
+
+
+		<div class="header-section text-center mb-5">
+
+
+			<h2 class="display-5 fw-bold"
+				style="color: var(--deep-love); letter-spacing: -1px;">
+				Nuestras Experiencias</h2>
+
+			<div class="divider mx-auto"></div>
+			<p class="text-muted mt-3 italic">"Donde cada detalle cuenta la
+				historia de ustedes"</p>
+
+		</div>
+
+		<div class="planes-wrapper">
+			<div class="row g-4 justify-content-center">
+				<div class="col-lg-4 col-md-6 reveal"
+					th:each="plan : ${listadoDePlanes}">
+					<div class="card card-plan h-100 shadow-sm border-0">
+
+						<div class="img-container position-relative">
+							<img
+								th:src="${plan.imagenUrl != null} ? @{'/assets/img/planes/' + ${plan.imagenUrl}} : @{'/assets/img/default.jpg'}"
+								class="img-gallery" th:alt="${plan.nombre}">
+
+							<div class="price-badge"
+								style="background: var(--deep-love); color: white; padding: 5px 15px; border-radius: 20px; position: absolute; bottom: 15px; right: 15px;">
+								<span
+									th:text="${plan.precioBase != null} ? '$' + ${#numbers.formatDecimal(plan.precioBase, 0, 'POINT', 0, 'COMMA')} : 'Consultar'"></span>
+							</div>
+						</div>
+
+						<div class="card-body d-flex flex-column text-center p-4">
+							<h4 class="card-title fw-bold mb-2" th:text="${plan.nombre}"
+								style="color: var(--deep-love);"></h4>
+
+							<p class="card-text text-muted small flex-grow-1"
+								th:text="${plan.descripcion}"></p>
+
+							<div class="mt-4">
+								<a th:href="@{/carrito/agregar/{id}(id=${plan.id})}"
+									class="btn btn-romance px-5 shadow-sm"> <i
+									class="bi bi-heart-fill me-2"></i>Reservar Ahora
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="~{admin/fragments :: footer}"></footer>
+	<script th:src="@{/assets/js/scroll-reveal.js}"></script>
+	<script>
+		AOS.init();
+	</script>
+	<div class="background-container">
+		<span class="element">❤️</span> <span class="element">🌹</span> <span
+			class="element">❤️</span> <span class="element">🌹</span> <span
+			class="element">❤️</span>
+	</div>
+</body>
+</html>

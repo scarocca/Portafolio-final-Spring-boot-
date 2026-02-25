@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="~{admin/fragments :: head(title='Gestión de Consultas')}"></head>
+
+<body class="bg-light">
+
+	<div class="admin-wrapper">
+
+		<nav th:replace="~{admin/fragments :: admin-sidebar}"></nav>
+
+
+		<div class="admin-content">
+			<div class="row mb-4">
+				<div class="col-md-4">
+					<div class="card border-0 shadow-sm rounded-4 bg-white text-dark">
+						<div class="card-body p-4">
+							<div class="d-flex align-items-center">
+								<div
+									class="flex-shrink-0 bg-primary-subtle p-3 rounded-circle me-3">
+									<i class="bi bi-grid-fill fs-3 text-primary"></i>
+								</div>
+								<div>
+									<h6 class="text-muted mb-1">Planes Activos</h6>
+									<h2 class="fw-bold mb-0" th:text="${totalConsultas}">0</h2>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card border-0 shadow-sm rounded-4 bg-white text-dark">
+						<div class="card-body p-4">
+							<div class="d-flex align-items-center">
+								<div
+									class="flex-shrink-0 bg-success-subtle p-3 rounded-circle me-3">
+									<i class="bi bi-chat-dots-fill fs-3 text-success"></i>
+								</div>
+								<div>
+									<h6 class="text-muted mb-1">Consultas Totales</h6>
+									<h2 class="fw-bold mb-0" th:text="${totalConsultas}">0</h2>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card border-0 shadow-sm rounded-4 text-white"
+						style="background: var(--deep-love);">
+						<div class="card-body p-4">
+							<h6 class="mb-2">¿Nueva Idea?</h6>
+							<p class="small mb-2 opacity-75">Crea una experiencia nueva
+								ahora mismo.</p>
+							<a href="/admin/planes/nuevo"
+								class="btn btn-light btn-sm rounded-pill px-3 fw-bold shadow-sm">
+								Comenzar <i class="bi bi-arrow-right ms-1"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid py-4">
+
+				<div th:if="${mensajeExito}"
+					class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4"
+					role="alert">
+					<i class="bi bi-check-circle-fill me-2"></i> <span
+						th:text="${mensajeExito}"></span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+
+				<div th:if="${mensajeError}"
+					class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm mb-4"
+					role="alert">
+					<i class="bi bi-exclamation-triangle-fill me-2"></i> <span
+						th:text="${mensajeError}"></span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<h2 class="fw-bold" style="color: var(--deep-love);">Catálogo
+						de Experiencias</h2>
+					<a href="/admin/planes/nuevo"
+						class="btn btn-romance rounded-pill shadow-sm"> <i
+						class="bi bi-plus-circle me-2"></i>Nueva Experiencia
+					</a>
+				</div>
+
+				<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+					<div class="table-responsive">
+						<table class="table table-hover align-middle mb-0">
+							<thead class="table-dark">
+								<tr>
+									<th class="ps-4">Vista</th>
+									<th>Nombre del Plan</th>
+									<th>Precio</th>
+									<th class="text-center">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="p : ${planes}">
+									<td class="ps-4"><img
+										th:src="${p.imagenUrl != null} ? @{'/assets/img/planes/' + ${p.imagenUrl}} : '/assets/img/no-image.png'"
+										class="rounded shadow-sm"
+										style="width: 80px; height: 50px; object-fit: cover;"
+										alt="Imagen plan"></td>
+
+									<td>
+										<div class="fw-bold text-dark" th:text="${p.nombre}">Nombre</div>
+										<span th:if="${!p.activo}"
+										class="badge bg-secondary-subtle text-secondary small"
+										style="font-size: 0.7rem;">Oculto</span>
+									</td>
+
+									<td><span
+										class="badge bg-success-subtle text-success fs-6"
+										th:text="'$' + ${#numbers.formatDecimal(p.precioBase, 0, 'POINT', 0, 'COMMA')}">
+									</span></td>
+
+									<td class="text-center">
+										<div class="btn-group shadow-sm">
+											<a th:href="@{/admin/planes/editar/{id}(id=${p.id})}"
+												class="btn btn-sm btn-outline-primary" title="Editar"> <i
+												class="bi bi-pencil-fill"></i>
+											</a> <a th:if="${p.activo}"
+												th:href="@{/admin/planes/ocultar/{id}(id=${p.id})}"
+												class="btn btn-sm btn-outline-warning"
+												title="Ocultar del catálogo"> <i
+												class="bi bi-eye-slash-fill"></i>
+											</a> <a th:if="${!p.activo}"
+												th:href="@{/admin/planes/activar/{id}(id=${p.id})}"
+												class="btn btn-sm btn-warning"
+												title="Mostrar en el catálogo"> <i
+												class="bi bi-eye-fill"></i>
+											</a> <a th:href="@{/admin/planes/eliminar/{id}(id=${p.id})}"
+												class="btn btn-sm btn-outline-danger"
+												title="Eliminar definitivamente"
+												onclick="return confirm('¿Estás seguro de eliminar este plan?')">
+												<i class="bi bi-trash-fill"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+
+								<tr th:if="${#lists.isEmpty(planes)}">
+									<td colspan="4" class="text-center py-5 text-muted fst-italic">
+										No hay planes registrados. ¡Crea el primero!</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

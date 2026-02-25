@@ -1,0 +1,270 @@
+
+
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+
+.img-container {
+   width: 100%;
+    height: 350px; /* Aumentamos un poco la altura para que se vea más imagen */
+    overflow: hidden;
+    border-radius: 1.5rem;
+    position: relative;
+    background-color: #fce4ec;
+}
+.img-container img {
+    width: 100%;
+    height: 100%;
+    /* MAGIA AQUÍ: 'cover' llena el espacio, 'contain' muestra la foto completa */
+    object-fit: cover; 
+    /* Centra la imagen para que no se corte solo de un lado */
+    object-position: center; 
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Efecto al pasar el mouse */
+.img-container:hover img {
+    transform: scale(1.05); /* Un zoom más sutil para no perder bordes */
+}
+
+.img-gallery {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene la proporción sin estirar */
+    object-position: center; /* Se enfoca en el centro de la foto */
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Si quieres que se vea la foto completa sin recortes, cambia cover por contain:
+   pero "cover" suele verse más profesional en tarjetas. */
+
+.card-plan:hover .img-gallery {
+    transform: scale(1.1); /* Zoom suave al entrar */
+}
+
+/* El divisor ahora con el color del "gran amor" */
+.divider {
+    height: 3px;
+    width: 80px;
+    border-radius: 10px;
+}
+/* Contenedor principal del carrito */
+.cart-container {
+    
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(248, 187, 208, 0.3); /* Un toque de romance-pink */
+}
+
+/* Estilo de la tabla */
+
+
+.cart-table th {
+    border: none;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.cart-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Total y acciones */
+.cart-total-label {
+    color: #5d4037;
+    font-weight: 300;
+}
+
+.cart-total-amount {
+    color: var(--deep-love);
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+/* Botón de eliminar más delicado */
+.btn-delete {
+    color: #ff8a80;
+    border: none;
+    background: none;
+    transition: 0.3s;
+}
+
+.btn-delete:hover {
+    color: var(--deep-love);
+    transform: scale(1.2);
+}
+
+.btn-outline-danger.rounded-pill {
+    border-color: #ffcdd2;
+    color: #e57373;
+}
+
+.btn-outline-danger.rounded-pill:hover {
+    background-color: #ffebee;
+    border-color: #ef5350;
+    color: #c62828;
+}
+:root {
+    --sidebar-width: 250px;
+}
+
+/* ESTRUCTURA DASHBOARD */
+.admin-wrapper {
+    display: flex; /* Esto pone el sidebar y el contenido uno al lado del otro */
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #2c3e50; /* Azul oscuro */
+    color: #fff;
+    min-height: 100vh; /* Que ocupe toda la altura */
+    transition: all 0.3s;
+}
+
+.admin-content {
+    width: 100%;
+    padding: 20px;
+    background-color: #f8f9fa; /* Gris claro de fondo */
+}
+
+/* Estilos de los links del Sidebar */
+#sidebar ul li a {
+    padding: 15px 20px;
+    display: block;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+}
+
+#sidebar ul li a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+/* Estilos específicos para la confirmación */
+.checkout-card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: none;
+    background: #ffffff;
+}
+
+.checkout-header {
+    background: linear-gradient(135deg, var(--deep-love), #ff4d6d);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.item-resumen {
+    border-left: 4px solid var(--romance-pink);
+    background-color: #fff9fa;
+    transition: transform 0.2s;
+}
+
+.item-resumen:hover {
+    transform: translateX(5px);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #4a4a4a;
+    font-size: 0.9rem;
+}
+
+.btn-confirmar {
+    background: var(--deep-love);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.btn-confirmar:hover {
+    background: #a8002a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(214, 45, 117, 0.3);
+}
+
+.input-custom {
+    border-radius: 10px;
+    border: 1px solid #eee;
+    padding: 12px;
+}
+
+.input-custom:focus {
+    border-color: var(--romance-pink);
+    box-shadow: 0 0 0 0.2rem rgba(255, 183, 197, 0.25);
+}
+.glass-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    transition: transform 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-10px); /* Efecto de levitación al pasar el mouse */
+}
+.hero-section {
+    position: relative; /* Importante para que los corazones no se salgan */
+    overflow: hidden;   /* Evita que aparezca scroll lateral o vertical */
+}
+
+
+
+/* Asegura que el contenido del hero esté por encima */
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+.hero-section h1 {
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+}
+/* Contenedor para evitar que la imagen se salga al crecer */
+
+
+/* Contenedor: Eliminamos el fondo sólido y el borde grueso */
+
+/* 1. Mantenemos el contenedor como fondo fijo */
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: transparent !important;
+}
+
+/* 2. REEMPLAZA tus estilos de .element con estos */
+
+/* Mejora para el texto de bienvenida en el Navbar */

@@ -1,0 +1,148 @@
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.planes-wrapper {
+    max-width: 1100px; 
+    margin: 0 auto;
+}
+.corazon {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    animation: flotar 4s ease-out forwards;
+    z-index: 1; /* Por detrás del texto */
+}
+
+@keyframes flotar {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        /* Suben mientras se hacen pequeños y giran */
+        transform: translateY(-200px) scale(0.5) rotate(45deg);
+        opacity: 0;
+    }
+}
+.element {
+  position: absolute;
+  bottom: -50px;
+  font-size: 24px;
+  user-select: none;
+  opacity: 0; /* Empiezan invisibles */
+  /* Aquí aplicamos la nueva animación de rotación y bamboleo */
+  animation: floatUpAndRotate 15s ease-in-out infinite;
+}
+
+/* 3. REEMPLAZA tu @keyframes anterior por este nuevo */
+@keyframes floatUpAndRotate {
+  0% {
+    transform: translateY(0) rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  50% {
+    /* En la mitad del camino, rotó 180 grados y se movió a la derecha */
+    transform: translateY(-50vh) rotate(180deg) translateX(25px);
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    /* Termina arriba con rotación completa y un leve movimiento a la izquierda */
+    transform: translateY(-110vh) rotate(360deg) translateX(-15px);
+    opacity: 0;
+  }
+}
+
+/* 4. Variaciones de tiempo (puedes mantener estas o ajustarlas) */
+.element:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
+.element:nth-child(2) { left: 30%; animation-delay: 4s; animation-duration: 22s; }
+.element:nth-child(3) { left: 50%; animation-delay: 8s; animation-duration: 15s; }
+.element:nth-child(4) { left: 70%; animation-delay: 2s; animation-duration: 25s; }
+.element:nth-child(5) { left: 90%; animation-delay: 6s; animation-duration: 19s; }
+
+#contenedor-avion {
+  position: absolute;
+  top: 15%; /* Ajusta la altura a tu gusto */
+  left: -500px; /* Suficiente espacio para que empiece oculto */
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+#imagen-avion {
+  width: 100px; /* Ajusta según el tamaño de tu imagen */
+  height: auto;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+}
+
+#mensaje-avion {
+  background-color: #f4ecd8; /* Color tipo papel antiguo o lona */
+  padding: 10px 25px;
+  border: 2px solid #8b4513; /* Borde color madera/cuero */
+  border-left: 3px solid #555;
+   border-right: 8px solid #555; /* Simula la cuerda o unión al avión */
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+  font-family: 'Courier New', Courier, monospace; /* Fuente tipo máquina de escribir */
+  font-weight: bold;
+  color: #333;
+  
+  /* Efecto de ondular para que parezca tela al viento */
+  animation: ondular 1.5s ease-in-out infinite alternate;
+  transform-origin: left center;
+}
+
+@keyframes ondular {
+  from { transform: rotate(1deg) skewY(1deg); }
+  to { transform: rotate(-1deg) skewY(-1deg); }
+}
+
+.animar-vuelo {
+  /* Añadimos 'infinite' al final */
+  animation: volar 15s linear infinite; 
+}
+@keyframes volar {
+  0% { 
+    transform: translateX(-550px); /* Empieza bien afuera a la izquierda */
+  }
+  100% { 
+    transform: translateX(180vw); /* Se asegura de salir completamente por la derecha */
+  }
+  
+}
+/* Animación del corazón */
+.bi-heart-fill {
+    display: inline-block; /* Necesario para que la animación funcione */
+    color: rgb(255, 0, 255) !important;
+    animation: latido 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+}
+
+@keyframes latido {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+    100% { transform: scale(1); }
+}
+.rosas-animadas {
+    position: absolute; /* O fixed si quieres que floten */
+    z-index: 10; /* El nivel más alto para tapar el navbar */
+}

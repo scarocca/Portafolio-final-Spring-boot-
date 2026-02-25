@@ -1,0 +1,388 @@
+/* Prueba con este código exacto para forzar el cambio */
+
+
+
+
+:root {
+    --romance-pink: #f8bbd0;
+    --ocean-blue: #4db6ac;
+    --deep-love: #ad1457;
+    --soft-cream: #fff9fb;
+}
+
+body {
+    /* Un degradado sutil que evoca un amanecer romántico */
+    background: radial-gradient(circle at top, #fff5f7 0%, #fce4ec 100%);
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+}
+
+body.tema-navidad {
+    --navidad-red: #d32f2f;    /* Rojo más vivo */
+    --navidad-green: #2e7d32;  /* Verde esmeralda */
+    --navidad-gold: #ffeb3b;   /* Dorado brillante */
+    --deep-love: var(--navidad-red) !important;
+    --romance-pink: var(--navidad-green) !important;
+}
+
+body.tema-navidad .navbar {
+    background-color: #2e7d32 !important;
+}
+body.tema-navidad .background-container {
+    /* Un degradado de verde esmeralda a un tono más profundo, pero no negro */
+    background: radial-gradient(circle at center, #1b5e20 0%, #0a3311 100%) !important;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                url('/assets/img/banner-playa.jpeg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    border-bottom-left-radius: 50% 20px;
+    border-bottom-right-radius: 50% 20px;
+}
+
+.card-plan {
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card-plan:hover {
+    transform: translateY(-10px);
+    shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.btn-romance {
+    background-color: var(--deep-love);
+    color: white;
+    border-radius: 25px;
+    padding: 10px 30px;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-romance:hover {
+    background-color: #880e4f;
+    color: white;
+    box-shadow: 0 4px 15px rgba(173, 20, 87, 0.4);
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    transition: transform 0.3s ease;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid #eee;
+}
+
+.form-control:focus {
+    border-color: var(--romance-pink);
+    box-shadow: 0 0 0 0.25rem rgba(248, 187, 208, 0.25);
+}
+
+.input-group-text {
+    border-radius: 10px 0 0 10px;
+}
+.cursor-typewriter {
+    font-weight: bold;
+    color: #ff4d6d; /* O el color principal de tu web */
+    animation: parpadeo 0.8s infinite;
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Limitamos la altura del contenedor del carrusel */
+#carouselHero {
+    max-height: 60vh; /* vh significa el % de la altura de la pantalla */
+    overflow: hidden;
+}
+
+/* Ajustamos las imágenes para que cubran el espacio sin deformarse */
+#carouselHero .carousel-item img {
+    height: 60vh;
+    object-fit: cover; /* Esto hace que la imagen se recorte en lugar de estirarse */
+    object-position: center; /* Centra la parte importante de la foto */
+}
+
+/* Centrado y ancho máximo del contenedor de planes */
+.planes-wrapper {
+    max-width: 1100px; 
+    margin: 0 auto;
+}
+
+.card-plan {
+    border: none !important;
+    background: rgba(255, 255, 255, 0.9); /* Blanco traslúcido */
+    backdrop-filter: blur(5px); /* Efecto de vidrio moderno */
+    border-radius: 20px !important;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.img-container {
+    width: 100%;
+    height: 280px; /* Aumentamos la altura para que la foto respire */
+    overflow: hidden;
+    background-color: #fce4ec; /* Color de fondo si la imagen tarda en cargar */
+}
+
+.img-gallery {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene la proporción sin estirar */
+    object-position: center; /* Se enfoca en el centro de la foto */
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Si quieres que se vea la foto completa sin recortes, cambia cover por contain:
+   pero "cover" suele verse más profesional en tarjetas. */
+
+.card-plan:hover .img-gallery {
+    transform: scale(1.1); /* Zoom suave al entrar */
+}
+
+/* El divisor ahora con el color del "gran amor" */
+.divider {
+    height: 3px;
+    width: 80px;
+    background: linear-gradient(to right, var(--romance-pink), var(--deep-love));
+    border-radius: 10px;
+}
+/* Contenedor principal del carrito */
+.cart-container {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(248, 187, 208, 0.3); /* Un toque de romance-pink */
+}
+
+/* Estilo de la tabla */
+.cart-table thead {
+    background-color: var(--romance-pink);
+    color: var(--deep-love);
+}
+
+.cart-table th {
+    border: none;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.cart-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Total y acciones */
+.cart-total-label {
+    color: #5d4037;
+    font-weight: 300;
+}
+
+.cart-total-amount {
+    color: var(--deep-love);
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+/* Botón de eliminar más delicado */
+.btn-delete {
+    color: #ff8a80;
+    border: none;
+    background: none;
+    transition: 0.3s;
+}
+
+.btn-delete:hover {
+    color: var(--deep-love);
+    transform: scale(1.2);
+}
+
+.btn-outline-danger.rounded-pill {
+    border-color: #ffcdd2;
+    color: #e57373;
+}
+
+.btn-outline-danger.rounded-pill:hover {
+    background-color: #ffebee;
+    border-color: #ef5350;
+    color: #c62828;
+}
+:root {
+    --sidebar-width: 250px;
+}
+
+/* ESTRUCTURA DASHBOARD */
+.admin-wrapper {
+    display: flex; /* Esto pone el sidebar y el contenido uno al lado del otro */
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #2c3e50; /* Azul oscuro */
+    color: #fff;
+    min-height: 100vh; /* Que ocupe toda la altura */
+    transition: all 0.3s;
+}
+
+.admin-content {
+    width: 100%;
+    padding: 20px;
+    background-color: #f8f9fa; /* Gris claro de fondo */
+}
+
+/* Estilos de los links del Sidebar */
+#sidebar ul li a {
+    padding: 15px 20px;
+    display: block;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+}
+
+#sidebar ul li a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+/* Estilos específicos para la confirmación */
+.checkout-card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: none;
+    background: #ffffff;
+}
+
+.checkout-header {
+    background: linear-gradient(135deg, var(--deep-love), #ff4d6d);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.item-resumen {
+    border-left: 4px solid var(--romance-pink);
+    background-color: #fff9fa;
+    transition: transform 0.2s;
+}
+
+.item-resumen:hover {
+    transform: translateX(5px);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #4a4a4a;
+    font-size: 0.9rem;
+}
+
+.btn-confirmar {
+    background: var(--deep-love);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.btn-confirmar:hover {
+    background: #a8002a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(214, 45, 117, 0.3);
+}
+
+.input-custom {
+    border-radius: 10px;
+    border: 1px solid #eee;
+    padding: 12px;
+}
+
+.input-custom:focus {
+    border-color: var(--romance-pink);
+    box-shadow: 0 0 0 0.2rem rgba(255, 183, 197, 0.25);
+}
+
+body.tema-navidad {
+    --deep-love: #b30000 !important;
+    --romance-pink: #2e7d32 !important;
+}
+/* Decoraciones específicas de Navidad */
+body.tema-navidad .navbar {
+  background-color: var(--navidad-red) !important;
+}
+
+body.tema-navidad .navbar-brand::before {
+    content: "🎄 ";
+}
+
+body.tema-navidad .hero-section {
+    /* Cambiamos el degradado del banner a uno con tintes verdes/rojos */
+    background: linear-gradient(rgba(46, 125, 50, 0.4), rgba(179, 0, 0, 0.4)), 
+                url('/assets/img/banner-navidad.jpg');
+    background-size: cover;
+}
+
+/* Efecto de nieve en las tarjetas de planes */
+body.tema-navidad .card-plan::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 10px;
+    background: linear-gradient(to bottom, #ffffff, transparent);
+    pointer-events: none;
+}
+
+/* Cambiar el botón romance a rojo navidad */
+body.tema-navidad .btn-romance {
+    background-color: var(--navidad-red);
+    border: 1px solid var(--navidad-gold);
+}
+/* --- INTEGRACIÓN DE ELEMENTOS FLOTANTES NAVIDEÑOS --- */
+
+/* Cuando el body tiene la clase tema-navidad, cambiamos el contenido de los elementos */
+body.tema-navidad .background-container .element:nth-child(5n+1)::before { content: "🎁"; }
+body.tema-navidad .background-container .element:nth-child(5n+2)::before { content: "🦌"; }
+body.tema-navidad .background-container .element:nth-child(5n+3)::before { content: "🎄"; }
+body.tema-navidad .background-container .element:nth-child(5n+4)::before { content: "🎅"; }
+body.tema-navidad .background-container .element:nth-child(5n+5)::before { content: "🍭"; }
+
+/* Estilo para que los iconos resalten sobre el fondo verde/rojo */
+body.tema-navidad .element {
+    font-size: 26px;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6)); /* Brillo dorado navideño */
+    opacity: 0.8;
+    z-index: 1000; /* Asegura que se vean sobre el hero-section si es necesario */
+}
+
+/* Ajuste del fondo para que combine con tus nuevas variables */
+body.tema-navidad .background-container {
+    background: radial-gradient(circle at top, #0a2d1d 0%, #05190f 100%) !important;
+}

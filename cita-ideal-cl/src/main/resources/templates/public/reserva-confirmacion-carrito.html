@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments :: head('Productos')}"></head>
+<body class="bg-light">
+
+	<nav class="navbar navbar-light bg-white shadow-sm mb-4">
+		<div class="container">
+			<a class="navbar-brand fw-bold" href="/" style="color: #d62d75;">
+				<i class="bi bi-heart-fill me-2"></i>CitaIdeal.cl
+			</a>
+		</div>
+	</nav>
+
+	<main class="container my-5">
+
+		<div th:if="${mensajeError}"
+			class="alert alert-danger alert-dismissible fade show shadow-sm mb-4"
+			role="alert">
+			<i class="bi bi-exclamation-triangle-fill me-2"></i> <span
+				th:text="${mensajeError}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"
+				aria-label="Close"></button>
+		</div>
+
+		<div class="row justify-content-center">
+			<div class="col-lg-10">
+				<div class="card checkout-card shadow-lg">
+					<div class="checkout-header text-center">
+						<h2 class="fw-bold mb-0">Casi listos para su Cita Ideal</h2>
+						<p class="mb-0 opacity-75">Completa los datos para coordinar
+							tu experiencia</p>
+					</div>
+
+					<div class="card-body p-lg-5">
+						<div class="row g-5">
+
+							<div class="col-md-5 order-md-2">
+								<h5 class="mb-4 fw-bold">
+									<i class="bi bi-bag-heart me-2"></i>Resumen de Selección
+								</h5>
+								<div class="list-group list-group-flush mb-3">
+									<div th:each="item : ${carrito}"
+										class="list-group-item item-resumen border-0 rounded shadow-sm">
+										<div class="d-flex justify-content-between align-items-center">
+											<span class="fw-bold text-dark" th:text="${item.plan.nombre}"></span>
+											<span class="text-muted small"
+												th:text="'$' + ${#numbers.formatDecimal(item.plan.precioBase, 0, 'POINT', 0, 'COMMA')}"></span>
+										</div>
+									</div>
+								</div>
+								<div
+									class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border">
+									<span class="h5 mb-0">Total a pagar:</span> <span
+										class="h4 mb-0 fw-bold text-danger"
+										th:text="'$' + ${#numbers.formatDecimal(totalCarrito, 0, 'POINT', 0, 'COMMA')}"></span>
+								</div>
+							</div>
+
+							<div class="col-md-7 order-md-1">
+								<form th:action="@{/pago/procesar-carrito}"
+									th:object="${reserva}" method="post">
+									<h5 class="mb-4 fw-bold">
+										<i class="bi bi-person-check me-2"></i>Datos de Contacto
+									</h5>
+
+									<div class="mb-3">
+										<label class="form-label fw-bold">Nombre del Titular</label> <input
+											type="text" th:field="*{nombreCliente}"
+											class="form-control input-custom"
+											placeholder="Tu nombre y apellido" required>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6 mb-3">
+											<label class="form-label fw-bold">Correo Electrónico</label>
+											<input type="email" th:field="*{emailCliente}"
+												class="form-control input-custom"
+												placeholder="amor@ejemplo.com" required>
+										</div>
+										<div class="col-md-6 mb-3">
+											<label class="form-label fw-bold">WhatsApp</label> <input
+												type="tel" th:field="*{telefonoCliente}"
+												class="form-control input-custom" placeholder="+56 9..."
+												required>
+										</div>
+									</div>
+
+									<div
+										class="mt-4 p-4 border rounded-4 bg-white shadow-sm border-danger-subtle">
+										<label class="form-label text-danger fw-bold"> <i
+											class="bi bi-calendar-heart me-2"></i>¿Cuándo será el gran
+											momento?
+										</label>
+
+										<div class="row g-2">
+											<div class="col-md-7">
+												<input type="date" id="fechaInput" name="fechaSolo"
+													class="form-control form-control-lg border-danger-subtle"
+													required>
+											</div>
+
+											<div class="col-md-5">
+												<select name="horaFija"
+													class="form-select form-control-lg border-danger-subtle"
+													required>
+													<option value="" selected disabled>Hora...</option>
+													<option value="10:00">10:00 AM</option>
+													<option value="15:00">03:00 PM</option>
+													<option value="20:00">08:00 PM</option>
+												</select>
+											</div>
+										</div>
+
+										<p class="small text-muted mt-2 mb-0">
+											<i class="bi bi-info-circle me-1"></i> Solo disponible en
+											turnos de 10:00, 15:00 y 20:00 hrs.
+										</p>
+									</div>
+
+									<script>
+										// Selecciona el input por su ID
+										const fechaInput = document
+												.getElementById('fechaInput');
+										// Obtiene la fecha actual en formato local (Chile)
+										const hoy = new Date();
+										const offset = hoy.getTimezoneOffset() * 60000;
+										const fechaLocal = new Date(hoy
+												- offset).toISOString().split(
+												'T')[0];
+
+										// Asigna el mínimo permitido (hoy)
+										fechaInput.setAttribute('min',
+												fechaLocal);
+									</script>
+
+									<div class="mt-5">
+										<button type="submit"
+											class="btn btn-confirmar w-100 rounded-pill btn-lg shadow">
+											CONTINUAR AL PAGO <i class="bi bi-credit-card ms-2"></i>
+										</button>
+										<div class="text-center mt-3">
+											<a th:href="@{/carrito/ver}"
+												class="text-muted small text-decoration-none"> <i
+												class="bi bi-chevron-left"></i> Volver a mi selección
+											</a>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

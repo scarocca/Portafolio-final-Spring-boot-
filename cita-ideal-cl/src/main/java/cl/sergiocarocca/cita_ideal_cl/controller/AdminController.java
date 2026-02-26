@@ -1,5 +1,6 @@
 	package cl.sergiocarocca.cita_ideal_cl.controller;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,13 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cl.sergiocarocca.cita_ideal_cl.entity.Consulta;
 import cl.sergiocarocca.cita_ideal_cl.entity.Reserva;
 import cl.sergiocarocca.cita_ideal_cl.entity.Usuario;
 import cl.sergiocarocca.cita_ideal_cl.repository.ConsultaRepository;
+import cl.sergiocarocca.cita_ideal_cl.service.ConsultaService;
 import cl.sergiocarocca.cita_ideal_cl.service.ReservaService;
 import cl.sergiocarocca.cita_ideal_cl.service.UsuarioService;
 
@@ -30,7 +34,7 @@ public class AdminController {
     private final ConsultaRepository consultaRepository;
     private final ReservaService reservaService;
     private final UsuarioService usuarioService;
-
+    private final ConsultaService consultaService;
     /**
      * Constructor para la inyección de dependencias.
      * * @param consultaRepository Repositorio para la gestión de consultas de contacto.
@@ -38,11 +42,12 @@ public class AdminController {
      * @param usuarioService Servicio para la gestión de cuentas de usuario.
      */
     public AdminController(ConsultaRepository consultaRepository, ReservaService reservaService,
-            UsuarioService usuarioService) {
+            UsuarioService usuarioService,ConsultaService consultaService) {
         super();
         this.consultaRepository = consultaRepository;
         this.reservaService = reservaService;
         this.usuarioService = usuarioService;
+        this.consultaService = consultaService;
     }
 
     /**
@@ -109,5 +114,16 @@ public class AdminController {
             flash.addFlashAttribute("error", "No se pudo eliminar el usuario.");
         }
         return "redirect:/admin/usuarios";
+    }
+    @PostMapping("/consultas/responder")
+    public String responder(@RequestParam Long consultaId, @RequestParam String respuesta, RedirectAttributes flash) {
+        Consulta consulta = consultaService.buscarPorId(consultaId);
+        consulta.setRespuesta(respuesta);
+        consulta.setFechaRespuesta(LocalDateTime.now());
+        
+        consultaService.guardar(consulta);
+        
+        flash.addFlashAttribute("mensajeExito", "¡Respuesta guardada con éxito!");
+        return "redirect:/admin/consultas"; // Ajusta a tu ruta real de listado
     }
 }

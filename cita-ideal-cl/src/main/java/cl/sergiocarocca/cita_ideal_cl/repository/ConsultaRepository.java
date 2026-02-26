@@ -24,4 +24,5 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
      * * @return Una lista de {@link Consulta} ordenada por fecha de envío de forma cronológica inversa.
      */
     List<Consulta> findAllByOrderByFechaEnvioDesc();
+    List<Consulta> findByUsuarioEmail(String email);
 }

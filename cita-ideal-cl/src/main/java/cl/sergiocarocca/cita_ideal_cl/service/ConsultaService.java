@@ -62,4 +62,17 @@ public class ConsultaService {
     public long contarTodas() {
         return consultaRepository.count();
     }
+    public List<Consulta> obtenerPorEmail(String email) {
+        return consultaRepository.findByUsuarioEmail(email);
+    }
+    /**
+     * Busca una consulta específica por su identificador único.
+     * @param id El ID de la consulta.
+     * @return El objeto Consulta encontrado.
+     * @throws RuntimeException Si la consulta no existe.
+     */
+    public Consulta buscarPorId(Long id) {
+        return consultaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encontró la consulta con el ID: " + id));
+    }
 }

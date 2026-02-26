@@ -38,6 +38,16 @@ public class Consulta {
     @ManyToOne
     @JoinColumn(name = "plan_id")
     private Plan plan;
+    
+    /** Relación con el usuario que envió la consulta (para el panel de cliente) */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+    
+    @Column(columnDefinition = "TEXT")
+    private String respuesta;
+
+    private LocalDateTime fechaRespuesta;
 
     /**
      * Método de ciclo de vida de JPA.
@@ -98,4 +108,30 @@ public class Consulta {
     public void setPlan(Plan plan) {
         this.plan = plan;
     }
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getRespuesta() {
+		return respuesta;
+	}
+
+	public void setRespuesta(String respuesta) {
+		this.respuesta = respuesta;
+	}
+
+	public LocalDateTime getFechaRespuesta() {
+		return fechaRespuesta;
+	}
+
+	public void setFechaRespuesta(LocalDateTime fechaRespuesta) {
+		this.fechaRespuesta = fechaRespuesta;
+	}
+	
+    
 }

@@ -3,7 +3,7 @@ package cl.sergiocarocca.cita_ideal_cl.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+import cl.sergiocarocca.cita_ideal_cl.entity.Usuario;
 /**
  * Entidad que representa la reserva de un servicio por parte de un cliente.
  * Almacena la información de contacto, el plan seleccionado, la fecha de la cita
@@ -51,6 +51,13 @@ public class Reserva {
     /** * Código alfanumérico único para que el cliente identifique su reserva. 
      */
     private String codigoSeguimiento;
+    
+    /** * Relación con el Usuario que realizó la cuenta. 
+     * Permite vincular la reserva con el panel del cliente.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     /**
      * Constructor por defecto requerido por JPA.
@@ -103,4 +110,13 @@ public class Reserva {
 
     public String getCodigoSeguimiento() { return codigoSeguimiento; }
     public void setCodigoSeguimiento(String codigoSeguimiento) { this.codigoSeguimiento = codigoSeguimiento; }
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+    
 }

@@ -54,4 +54,5 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
      * * @return Lista de reservas ordenadas desde la más futura a la más antigua.
      */
     List<Reserva> findAllByOrderByFechaCitaDesc();
+    List<Reserva> findByUsuarioEmail(String email);
 }

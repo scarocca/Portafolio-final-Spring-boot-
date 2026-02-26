@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import cl.sergiocarocca.cita_ideal_cl.entity.ItemCarrito;
 import cl.sergiocarocca.cita_ideal_cl.entity.Reserva;
+import cl.sergiocarocca.cita_ideal_cl.entity.Usuario;
 import cl.sergiocarocca.cita_ideal_cl.repository.ReservaRepository;
 import cl.sergiocarocca.cita_ideal_cl.util.GeneradorCodigo;
 import jakarta.transaction.Transactional;
@@ -67,7 +68,7 @@ public class ReservaService {
      * @return Lista de reservas confirmadas y guardadas.
      * @throws Exception Si al menos uno de los servicios solicitados no tiene disponibilidad.
      */
-    public List<Reserva> guardarReservaMultiple(List<ItemCarrito> carrito, LocalDateTime fecha, Reserva datosCliente) throws Exception {
+    public List<Reserva> guardarReservaMultiple(List<ItemCarrito> carrito, LocalDateTime fecha, Reserva datosCliente,Usuario usuarioLogueado) throws Exception {
         List<Reserva> listaConfirmadas = new ArrayList<>();        
         
         // 1. Validar disponibilidad de TODOS los planes antes de guardar nada (Consistencia)
@@ -91,6 +92,8 @@ public class ReservaService {
             nueva.setFechaCita(fecha);
             nueva.setPlan(item.getPlan());
             nueva.setEstado("CONFIRMADA");
+            
+            nueva.setUsuario(usuarioLogueado);
             // Generación de código único de seguimiento
             nueva.setCodigoSeguimiento(java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             
@@ -147,5 +150,8 @@ public class ReservaService {
     }
     public boolean verificarOcupado(Long planId, LocalDateTime fecha) {
         return reservaRepository.existeReservaEnEsaFecha(planId, fecha);
+    }
+    public List<Reserva> obtenerPorEmail(String email) {
+        return reservaRepository.findByUsuarioEmail(email);
     }
 }

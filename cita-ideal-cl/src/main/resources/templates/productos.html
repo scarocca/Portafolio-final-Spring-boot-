@@ -80,46 +80,53 @@
 		</div>
 
 		<div class="planes-wrapper">
-			<div class="row g-4 justify-content-center">
-				<div class="col-lg-4 col-md-6 reveal"
-					th:each="plan : ${listadoDePlanes}">
-					<div class="card card-plan h-100 shadow-sm border-0">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-4 col-md-6 reveal" th:each="plan : ${listadoDePlanes}">
+            <div class="card-flip-container">
+                <div class="card-flip-inner">
+                    
+                    <div class="card-front">
+                        <div class="img-container h-100 position-relative">
+                            <img th:src="${plan.imagenUrl != null} ? @{'/assets/img/planes/' + ${plan.imagenUrl}} : @{'/assets/img/default.jpg'}"
+                                 class="img-gallery w-100 h-100" style="object-fit: cover;" 
+                                 th:alt="${plan.nombre}">
+                            
+                            <div class="price-badge-floating">
+                                <span th:text="${plan.precioBase != null} ? '$' + ${#numbers.formatDecimal(plan.precioBase, 0, 'POINT', 0, 'COMMA')} : 'Consultar'"></span>
+                            </div>
+                            
+                            <div class="front-title-overlay">
+                                <h4 th:text="${plan.nombre}"></h4>
+                            </div>
+                        </div>
+                    </div>
 
-						<div class="img-container position-relative">
-							<img
-								th:src="${plan.imagenUrl != null} ? @{'/assets/img/planes/' + ${plan.imagenUrl}} : @{'/assets/img/default.jpg'}"
-								class="img-gallery" th:alt="${plan.nombre}">
+                    <div class="card-back d-flex flex-column justify-content-center p-4">
+                        <h4 class="fw-bold text-white mb-2" th:text="${plan.nombre}"></h4>
+                        <div class="divider mb-3"></div>
+                        
+                        <p class="card-text text-white small flex-grow-1 overflow-auto" 
+                           th:text="${plan.descripcion}"></p>
 
-							<div class="price-badge"
-								style="background: var(--deep-love); color: white; padding: 5px 15px; border-radius: 20px; position: absolute; bottom: 15px; right: 15px;">
-								<span
-									th:text="${plan.precioBase != null} ? '$' + ${#numbers.formatDecimal(plan.precioBase, 0, 'POINT', 0, 'COMMA')} : 'Consultar'"></span>
-							</div>
-						</div>
+                        <div class="mt-4">
+                            <a th:href="@{/carrito/agregar/{id}(id=${plan.id})}"
+                               class="btn btn-light px-5 shadow-sm"> 
+                               <i class="bi bi-heart-fill me-2 text-danger"></i>Reservar
+                            </a>
+                        </div>
+                        <p class="mt-3 text-white-50" style="font-size: 0.7rem;">Click para volver</p>
+                    </div>
 
-						<div class="card-body d-flex flex-column text-center p-4">
-							<h4 class="card-title fw-bold mb-2" th:text="${plan.nombre}"
-								style="color: var(--deep-love);"></h4>
-
-							<p class="card-text text-muted small flex-grow-1"
-								th:text="${plan.descripcion}"></p>
-
-							<div class="mt-4">
-								<a th:href="@{/carrito/agregar/{id}(id=${plan.id})}"
-									class="btn btn-romance px-5 shadow-sm"> <i
-									class="bi bi-heart-fill me-2"></i>Reservar Ahora
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	</div>
 
 	<footer th:replace="~{admin/fragments :: footer}"></footer>
 	<script th:src="@{/assets/js/scroll-reveal.js}"></script>
+	<script th:src="@{/assets/js/3dscripts.js}"></script>
 	<script>
 		AOS.init();
 	</script>

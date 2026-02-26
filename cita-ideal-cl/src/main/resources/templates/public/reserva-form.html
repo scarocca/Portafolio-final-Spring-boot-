@@ -1,0 +1,52 @@
+<form th:action="@{/pago/procesar}" th:object="${reserva}"
+	method="post" class="p-4 shadow rounded bg-white">
+
+	<div th:if="${mensajeError}"
+		class="alert alert-danger alert-dismissible fade show" role="alert">
+		<i class="bi bi-exclamation-triangle-fill me-2"></i> <span
+			th:text="${mensajeError}"></span>
+		<button type="button" class="btn-close" data-bs-dismiss="alert"
+			aria-label="Close"></button>
+	</div>
+	<input type="hidden" name="planId" th:value="${plan.id}">
+	<h3 class="text-primary mb-4" 
+        th:text="'Reservar: ' + ${plan?.nombre ?: 'Experiencia seleccionada'}"></h3>
+
+	
+
+	<div class="mb-3">
+		<label class="form-label">Tu Nombre Completo</label> <input
+			type="text" th:field="*{nombreCliente}" class="form-control" required
+			placeholder="Ej: Juan Pérez">
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Correo Electrónico</label> <input
+			type="email" th:field="*{emailCliente}" class="form-control" required
+			placeholder="juan@ejemplo.com">
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Teléfono de Contacto</label> <input
+			type="tel" th:field="*{telefonoCliente}" class="form-control"
+			required placeholder="+569...">
+	</div>
+
+	<div class="mb-3">
+    <label class="form-label fw-bold text-danger">Selecciona Fecha</label>
+    <input type="date" name="fecha" class="form-control" required>
+</div>
+
+<div class="mb-3">
+    <label class="form-label fw-bold text-danger">Selecciona Hora</label>
+    <select name="hora" class="form-control" required>
+        <option value="" selected disabled>Seleccione una hora...</option>
+        <option value="10:00">10:00 AM</option>
+        <option value="15:00">03:00 PM</option>
+        <option value="20:00">08:00 PM</option>
+    </select>
+</div>
+
+	<button type="submit" class="btn btn-danger w-100 rounded-pill">Confirmar
+		Mi Cita</button>
+</form>

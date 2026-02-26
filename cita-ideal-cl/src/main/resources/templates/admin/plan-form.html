@@ -41,52 +41,60 @@
 
 						<div class="card border-0 shadow-sm rounded-4">
 							<div class="card-body p-5">
-								<form th:action="@{/admin/planes/guardar}" th:object="${plan}"
-									method="post" enctype="multipart/form-data">
+    <form th:action="@{/admin/planes/guardar}" th:object="${plan}"
+        method="post" enctype="multipart/form-data">
 
-									<div class="mb-3">
-										<label class="form-label">Nombre del Plan</label> <input
-											type="text" th:field="*{nombre}" class="form-control"
-											placeholder="Ej: Cena Romántica Estelar" required> <small
-											class="text-danger" th:if="${#fields.hasErrors('nombre')}"
-											th:errors="*{nombre}"></small>
-									</div>
+        <input type="hidden" th:field="*{id}" />
 
-									<div class="mb-3">
-										<label class="form-label">Descripción</label>
-										<textarea th:field="*{descripcion}" class="form-control"
-											rows="3" placeholder="Describe qué incluye el plan..."
-											required></textarea>
-									</div>
+        <div class="mb-3">
+            <label class="form-label">Nombre del Plan</label> 
+            <input type="text" th:field="*{nombre}" class="form-control"
+                placeholder="Ej: Cena Romántica Estelar" required> 
+            <small class="text-danger" th:if="${#fields.hasErrors('nombre')}"
+                th:errors="*{nombre}"></small>
+        </div>
 
-									<div class="mb-3">
-										<label class="form-label fw-bold">Precio del Plan</label>
-										<div class="input-group">
-											<span class="input-group-text">$</span> <input type="number"
-												step="0.01" th:field="*{precioBase}" class="form-control"
-												th:classappend="${#fields.hasErrors('precioBase')} ? 'is-invalid' : ''">
-										</div>
-										<div class="invalid-feedback"
-											th:if="${#fields.hasErrors('precioBase')}"
-											th:errors="*{precioBase}"></div>
-									</div>
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea th:field="*{descripcion}" class="form-control"
+                rows="3" placeholder="Describe qué incluye el plan..."
+                required></textarea>
+        </div>
 
-									<div class="mb-3">
-										<label class="form-label">Imagen del Plan</label> <input
-											type="file" name="archivoImagen" class="form-control"
-											accept="image/*" required>
-										<div class="form-text">Formatos sugeridos: JPG o PNG.</div>
-									</div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Precio del Plan</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span> 
+                <input type="number" step="0.01" th:field="*{precioBase}" class="form-control"
+                    th:classappend="${#fields.hasErrors('precioBase')} ? 'is-invalid' : ''">
+            </div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('precioBase')}"
+                th:errors="*{precioBase}"></div>
+        </div>
 
-									<hr>
+        <div class="mb-3">
+            <label class="form-label">Imagen del Plan</label> 
+            <input type="file" name="archivoImagen" class="form-control" accept="image/*" 
+                   th:required="${plan.id == null}">
+            
+            <div class="form-text">Formatos sugeridos: JPG o PNG. 
+                <span th:if="${plan.id != null}" class="text-primary">
+                    (Deja vacío para mantener la imagen actual)
+                </span>
+            </div>
+            <small class="text-danger" th:if="${errorImagen}" th:text="${errorImagen}"></small>
+        </div>
 
-									<div class="d-grid">
-										<button type="submit" class="btn btn-primary rounded-pill">
-											<i class="bi bi-cloud-arrow-up me-2"></i>Guardar Nuevo Plan
-										</button>
-									</div>
-								</form>
-							</div>
+        <hr>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary rounded-pill">
+                <i class="bi bi-cloud-arrow-up me-2"></i>
+                <span th:text="${plan.id == null ? 'Guardar Nuevo Plan' : 'Actualizar Cambios'}"></span>
+            </button>
+        </div>
+    </form>
+</div>
 						</div>
 					</div>
 				</div>

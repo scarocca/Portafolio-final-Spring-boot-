@@ -50,7 +50,10 @@
 				th:class="${seccion == 'consultas'} ? 'nav-link active bg-danger' : 'nav-link text-white'">
 					<i class="bi bi-chat-dots-fill me-2"></i> Consultas
 			</a></li>
-
+			<li><a th:href="@{/admin/reservas}"
+				th:class="${seccion == 'reservas'} ? 'nav-link active bg-danger' : 'nav-link text-white'">
+					<i class="bi bi-chat-dots-fill me-2"></i> Reservas
+			</a></li>
 			
 
 			<hr class="mx-3 opacity-25">

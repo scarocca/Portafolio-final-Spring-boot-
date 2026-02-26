@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import cl.sergiocarocca.cita_ideal_cl.service.CustomSuccessHandler;
 import cl.sergiocarocca.cita_ideal_cl.service.CustomUserDetailsService;
 
 /**
@@ -28,6 +29,8 @@ public class SecurityConfig {
     
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private CustomSuccessHandler successHandler;
 
     /**
      * Define la cadena de filtros de seguridad (Security Filter Chain).
@@ -53,7 +56,7 @@ public class SecurityConfig {
             .userDetailsService(userDetailsService)
             .formLogin(form -> form
                 .loginPage("/login")            
-                .defaultSuccessUrl("/productos", true) // Redirección tras login exitoso
+                .successHandler(successHandler)
                 .permitAll()
             )
             .logout(logout -> logout

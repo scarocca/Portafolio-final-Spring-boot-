@@ -29,12 +29,11 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
      * @param fecha Marca de tiempo (fecha y hora) de la cita solicitada.
      * @return true si ya existe una reserva confirmada para ese horario, false en caso contrario.
      */
-    @Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.plan.id = :planId " +
-           "AND r.fechaCita = :fecha " +
-           "AND r.estado = 'CONFIRMADA'")
-    boolean existeReservaEnEsaFecha(@Param("planId") Long planId, 
-                                    @Param("fecha") LocalDateTime fecha);
-
+	@Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.plan.id = :planId " +
+		       "AND r.fechaCita = :fecha " +
+		       "AND r.estado != 'CANCELADA'") // Cambiamos la condición
+		boolean existeReservaEnEsaFecha(@Param("planId") Long planId, 
+		                                @Param("fecha") LocalDateTime fecha);
     /**
      * Recupera todas las reservas asociadas a la dirección de correo electrónico de un cliente.
      * * @param email Correo electrónico del cliente.

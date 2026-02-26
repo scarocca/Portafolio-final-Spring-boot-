@@ -1,4 +1,4 @@
-package cl.sergiocarocca.cita_ideal_cl.controller;
+	package cl.sergiocarocca.cita_ideal_cl.controller;
 
 import java.util.Collections;
 import java.util.List;
@@ -81,6 +81,17 @@ public class AdminController {
         List<Usuario> lista = usuarioService.listartodo();
         model.addAttribute("usuarios", lista);
         return "admin/usuario-lista";
+    }
+    @GetMapping("/reservas/confirmar/{id}")
+    public String confirmarReserva(@PathVariable Long id, RedirectAttributes flash) {
+        try {
+            reservaService.confirmarReserva(id);
+            flash.addFlashAttribute("success", "¡Reserva confirmada exitosamente!");
+        } catch (Exception e) {
+            flash.addFlashAttribute("error", "No se pudo confirmar la reserva.");
+        }
+        // Redirigimos a la misma vista de reservas para ver el cambio
+        return "redirect:/admin/reservas"; 
     }
 
     /**

@@ -8,13 +8,16 @@ import cl.sergiocarocca.cita_ideal_cl.service.ReservaService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controlador principal para la gestión de reservas de servicios.
@@ -74,33 +77,30 @@ public class ReservaController {
      */
     @PostMapping("/guardar")
     public String guardarReserva(@ModelAttribute Reserva reserva, 
-                                @RequestParam(value = "planId", required = false) Long planId,
                                 @RequestParam("fechaSolo") String fechaSolo,
                                 @RequestParam("horaFija") String horaFija,
-                                Model model,
-                                RedirectAttributes flash) {
+                                RedirectAttributes flash, Model model) {
         try {
-            if (planId == null) {
-                return "redirect:/reservas/confirmar-todo"; 
-            }
-
-            Plan plan = planService.buscarPorId(planId);
-            reserva.setPlan(plan);
-
-            // Unión de fecha y hora para el motor de persistencia
+            // 1. Unimos fecha y hora
             String fechaCompleta = fechaSolo + "T" + horaFija; 
-            reserva.setFechaCita(LocalDateTime.parse(fechaCompleta));
             
+            // 2. IMPORTANTE: Limpiamos segundos y nanosegundos para que la comparación sea exacta
+            LocalDateTime fechaExacta = LocalDateTime.parse(fechaCompleta)
+                                                    .withSecond(0)
+                                                    .withNano(0);
+            
+            reserva.setFechaCita(fechaExacta);
+            
+            // 3. Llamamos al servicio (que hará el COUNT en el repositorio)
             reservaService.crearReserva(reserva);
             
             model.addAttribute("reserva", reserva);
-            model.addAttribute("nombreCliente", reserva.getNombreCliente());
-            
             return "public/reserva-exito";
             
-        } catch (Exception e) {
-            flash.addFlashAttribute("mensajeError", e.getMessage());
-            return "redirect:/productos";
+        } catch (RuntimeException e) {
+            // Si el servicio lanza la excepción porque el COUNT fue > 0
+            flash.addFlashAttribute("mensajeError", "Lo sentimos, este horario ya está reservado para este plan.");
+            return "redirect:/reservas/nuevo/" + reserva.getPlan().getId();
         }
     }
 
@@ -154,7 +154,7 @@ public class ReservaController {
     public String listarReservas(Model model) {
         List<Reserva> lista = reservaService.listarTodas();
         model.addAttribute("reservas", lista);
-        return "admin/reservas-list";
+        return "admin/dashboard-reservas";
     }
 
     /**
@@ -172,5 +172,22 @@ public class ReservaController {
             flash.addFlashAttribute("mensajeError", "Error al intentar eliminar: " + e.getMessage());
         }
         return "redirect:/reservas/admin/listar";
+    }
+    @GetMapping("/validar-disponibilidad")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> validarDisponibilidad(
+            @RequestParam Long planId, 
+            @RequestParam String fecha, 
+            @RequestParam String hora) {
+        
+        LocalDateTime fechaCita = LocalDateTime.parse(fecha + "T" + hora)
+                                               .withSecond(0)
+                                               .withNano(0);
+                                               
+        boolean ocupado = reservaService.verificarOcupado(planId, fechaCita);
+        
+        Map<String, Boolean> respuesta = new HashMap<>();
+        respuesta.put("disponible", !ocupado);
+        return ResponseEntity.ok(respuesta);
     }
 }

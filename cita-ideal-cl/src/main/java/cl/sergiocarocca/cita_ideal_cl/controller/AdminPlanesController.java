@@ -90,8 +90,31 @@ public class AdminPlanesController {
      * @return Redirección al listado actualizado de planes.
      */
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
-        planService.eliminar(id); 
+    public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
+        try {
+            // 1. Buscamos el plan para saber el nombre de la imagen
+            Plan plan = planService.buscarPorId(id);
+
+            if (plan != null) {
+                // 2. Lógica de borrado físico del archivo
+                if (plan.getImagenUrl() != null && !plan.getImagenUrl().isEmpty()) {
+                    Path rutaArchivo = Paths.get(carpetaPlanes)
+                                            .toAbsolutePath()
+                                            .resolve(plan.getImagenUrl());
+                    
+                    // Borramos el archivo físico
+                    Files.deleteIfExists(rutaArchivo);
+                }
+
+                // 3. Borramos el registro de la base de datos
+                planService.eliminar(id);
+                flash.addFlashAttribute("success", "El plan y su imagen han sido eliminados.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            flash.addFlashAttribute("error", "Error al eliminar el archivo físico.");
+        }
+
         return "redirect:/admin/planes";
     }
 
@@ -106,87 +129,53 @@ public class AdminPlanesController {
      * @return Redirección al listado o retorno al formulario en caso de error.
      */
     @PostMapping("/guardar")
-    public String guardarPlan(@Valid @ModelAttribute("plan") Plan plan,
+    public String guardarPlan(@Valid @ModelAttribute Plan plan,
                               BindingResult result,    
                               @RequestParam("archivoImagen") MultipartFile archivo,
                               RedirectAttributes flash, Model model) {
         
+        // 1. Validar errores de campos (nombre, precio, etc.)
         if (result.hasErrors()) {
             return "admin/plan-form"; 
         }
         
+        // 2. Validar imagen obligatoria solo si es un plan NUEVO
         if (plan.getId() == null && archivo.isEmpty()) {
             model.addAttribute("errorImagen", "La imagen es obligatoria para nuevos planes");
             return "admin/plan-form";
         }
-        
-        if (!archivo.isEmpty()) {
-            try {
-                Path rutaAbsoluta = Paths.get(carpetaPlanes).toAbsolutePath();
-                if (!Files.exists(rutaAbsoluta)) {
-                    Files.createDirectories(rutaAbsoluta);
-                }
 
-                String nombreArchivo = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
-                
-                byte[] bytes = archivo.getBytes();
-                Path rutaArchivoFinal = rutaAbsoluta.resolve(nombreArchivo);
-                Files.write(rutaArchivoFinal, bytes);
-
-                plan.setImagenUrl(nombreArchivo);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                flash.addFlashAttribute("error", "Error crítico al subir la imagen: " + e.getMessage());
-                return "redirect:/admin/planes/nuevo";
-            }
-        }
-
-        planService.guardar(plan);
-        flash.addFlashAttribute("success", "¡El plan ha sido guardado exitosamente!");
-        
-        return "redirect:/admin/planes";
-    }
-
-    /**
-     * Actualiza un plan existente. Si se sube una nueva imagen, elimina la anterior
-     * del servidor para optimizar el almacenamiento.
-     * * @param id ID del plan a modificar.
-     * @param planModificado Datos provenientes del formulario.
-     * @param archivo Nueva imagen (opcional).
-     * @param flash Atributos para mensajes de respuesta.
-     * @return Redirección a la lista de planes.
-     */
-    @PostMapping("/editar/{id}")
-    public String actualizarPlan(@PathVariable Long id, 
-                                @ModelAttribute("plan") Plan planModificado,
-                                @RequestParam("archivoImagen") MultipartFile archivo,
-                                RedirectAttributes flash) {
         try {
-            Plan planExistente = planService.buscarPorId(id);
+            Plan planExistente = null;
+            if (plan.getId() != null) {
+                planExistente = planService.buscarPorId(plan.getId());
+            }
 
             if (!archivo.isEmpty()) {
-                // Borrar foto vieja si existe para no dejar basura en el servidor
-                if (planExistente.getImagenUrl() != null) {
-                    Path rutaFotoVieja = Paths.get(carpetaPlanes).toAbsolutePath().resolve(planExistente.getImagenUrl());
+                // Lógica de guardado de imagen nueva
+                Path rutaAbsoluta = Paths.get(carpetaPlanes).toAbsolutePath();
+                if (!Files.exists(rutaAbsoluta)) Files.createDirectories(rutaAbsoluta);
+
+                // Borrar imagen vieja si existe y estamos editando
+                if (planExistente != null && planExistente.getImagenUrl() != null) {
+                    Path rutaFotoVieja = rutaAbsoluta.resolve(planExistente.getImagenUrl());
                     Files.deleteIfExists(rutaFotoVieja);
                 }
 
-                String nombreUnico = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
-                Path rutaNueva = Paths.get(carpetaPlanes).toAbsolutePath().resolve(nombreUnico);
-                Files.write(rutaNueva, archivo.getBytes());
+                String nombreArchivo = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
+                Files.write(rutaAbsoluta.resolve(nombreArchivo), archivo.getBytes());
+                plan.setImagenUrl(nombreArchivo);
 
-                planModificado.setImagenUrl(nombreUnico);
-            } else {
-                // Conservar la imagen actual si no se seleccionó una nueva
-                planModificado.setImagenUrl(planExistente.getImagenUrl());
+            } else if (planExistente != null) {
+                // Si NO hay archivo nuevo pero es EDICIÓN, mantenemos la que ya tenía
+                plan.setImagenUrl(planExistente.getImagenUrl());
             }
 
-            planService.guardar(planModificado);
-            flash.addFlashAttribute("success", "¡Plan actualizado con éxito!");
+            planService.guardar(plan);
+            flash.addFlashAttribute("success", plan.getId() == null ? "¡Plan creado!" : "¡Plan actualizado!");
 
         } catch (IOException e) {
-            flash.addFlashAttribute("error", "Error al procesar la imagen");
+            flash.addFlashAttribute("error", "Error al procesar archivos: " + e.getMessage());
         }
 
         return "redirect:/admin/planes";

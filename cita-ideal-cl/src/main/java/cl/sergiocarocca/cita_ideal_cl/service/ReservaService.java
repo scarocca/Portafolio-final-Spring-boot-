@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import cl.sergiocarocca.cita_ideal_cl.entity.ItemCarrito;
 import cl.sergiocarocca.cita_ideal_cl.entity.Reserva;
 import cl.sergiocarocca.cita_ideal_cl.repository.ReservaRepository;
+import cl.sergiocarocca.cita_ideal_cl.util.GeneradorCodigo;
+import jakarta.transaction.Transactional;
 
 /**
  * Servicio encargado de orquestar la lógica de negocio de las reservas.
@@ -30,20 +32,23 @@ public class ReservaService {
      * @return La reserva persistida en la base de datos.
      * @throws Exception Si el horario ya se encuentra ocupado por una reserva confirmada.
      */
-    public Reserva crearReserva(Reserva reserva) throws Exception {
+    @Transactional
+    public Reserva crearReserva(Reserva reserva) {
         // 1. Validar disponibilidad
         boolean ocupado = reservaRepository.existeReservaEnEsaFecha(
-                            reserva.getPlan().getId(), 
-                            reserva.getFechaCita());
-        
+                reserva.getPlan().getId(), 
+                reserva.getFechaCita()
+        );
+
         if (ocupado) {
-            throw new Exception("Lo sentimos, este horario ya no está disponible.");
+            throw new RuntimeException("Lo sentimos, este horario ya no está disponible para este plan.");
         }
-        
-        // 2. Si está libre, guardamos
+
+        // 2. Si está libre, procedemos
+        reserva.setEstado("PENDIENTE");
+        reserva.setCodigoSeguimiento(GeneradorCodigo.generar()); // Tu lógica de códigos
         return reservaRepository.save(reserva);
     }
-    
     /**
      * Obtiene el listado de todas las reservas ordenadas por fecha de cita descendente.
      * * @return Lista completa de reservas registradas.
@@ -122,5 +127,25 @@ public class ReservaService {
                 }
             }
         );
+    }
+    /**
+     * Cambia el estado de una reserva a 'CONFIRMADA'.
+     * @param id Identificador de la reserva.
+     * @throws RuntimeException si la reserva no existe.
+     */
+    @Transactional
+    public void confirmarReserva(Long id) {
+        // Buscamos la reserva por ID
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reserva con ID " + id + " no encontrada"));
+        
+        // Cambiamos el estado
+        reserva.setEstado("CONFIRMADA");
+        
+        // Guardamos los cambios
+        reservaRepository.save(reserva);
+    }
+    public boolean verificarOcupado(Long planId, LocalDateTime fecha) {
+        return reservaRepository.existeReservaEnEsaFecha(planId, fecha);
     }
 }

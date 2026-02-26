@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments :: head('Mi Panel')}"></head>
+<body>
+	<nav
+		class="navbar navbar-expand-lg navbar-light fixed-top navbar-cielo">
+		<div class="container d-flex align-items-center">
+			<a class="navbar-brand fw-bold" href="/" style="color: #D4AF37;">
+				<i class="bi bi-heart-fill me-2"></i>TuCitaIdeal
+			</a>
+
+			<div class="ms-auto d-flex align-items-center">
+
+
+
+				<div class="bienvenida me-3" sec:authorize="hasRole('USER')">
+					<p class="mb-0">
+						Hola, <span th:text="${#authentication.name}">Usuario</span>
+					</p>
+				</div>
+
+				<a th:href="@{/panel}" sec:authorize="hasRole('USER')"
+					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
+				</a>
+				<div class="ms-auto">
+					<a th:href="@{/login}" sec:authorize="isAnonymous()"
+						class="btn btn-outline-light px-4 shadow-sm"> <i
+						class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+					</a>
+				</div>
+				<form sec:authorize="isAuthenticated()" th:action="@{/logout}"
+					method="post">
+					<button type="submit" class="btn btn-link btn-sm text-muted">Cerrar
+						Sesión</button>
+				</form>
+
+			</div>
+		</div>
+	</nav>
+	<div class="container mt-5 pt-5">
+		<h2 class="mb-4">
+			Bienvenido a tu Panel, <span th:text="${#authentication.name}">Usuario</span>
+		</h2>
+
+		<div class="row">
+			<div class="col-md-8">
+				<div class="card shadow-sm p-3">
+					<h4>Mis Reservas</h4>
+					<table class="table mt-3">
+						<thead>
+							<tr>
+								<th>Plan</th>
+								<th>Fecha Cita</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="r : ${reservas}">
+								<td th:text="${r.plan.nombre}"></td>
+								<td
+									th:text="${#temporals.format(r.fechaCita, 'dd/MM/yyyy HH:mm')}"></td>
+								<td th:text="${r.estado}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="card shadow-sm p-3 mt-4">
+			<h4>Mis Consultas</h4>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Fecha</th>
+						<th>Asunto</th>
+						<th>Estado</th>
+						<th>Respuesta</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="c : ${consultas}">
+						<td th:text="${#temporals.format(c.fechaEnvio, 'dd/MM/yyyy')}"></td>
+						<td
+							th:text="${c.plan != null ? c.plan.nombre : 'Consulta General'}"></td>
+
+						<td th:text="${#strings.abbreviate(c.mensaje, 30)}"></td>
+						<td><span th:if="${c.respuesta == null}"
+							class="badge bg-warning text-dark">Pendiente</span> <span
+							th:if="${c.respuesta != null}" class="badge bg-success">Respondida</span>
+						</td>
+						<td>
+							<p th:if="${c.respuesta != null}" class="small italic text-muted"
+								th:text="${c.respuesta}"></p> <span
+							th:if="${c.respuesta == null}">---</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

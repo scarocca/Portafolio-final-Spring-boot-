@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1. Buscamos el usuario en la BD por su nombre de usuario
         Usuario usuario = usuarioRepo.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("No se encontró una cuenta con el correo: " + username));
 
         // 2. Convertimos tus Roles (Entidades) en GrantedAuthority (lo que entiende Spring)
         // Usamos Java Streams para transformar cada Rol en una SimpleGrantedAuthority

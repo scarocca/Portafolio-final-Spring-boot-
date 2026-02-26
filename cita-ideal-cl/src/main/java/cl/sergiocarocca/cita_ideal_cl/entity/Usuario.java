@@ -30,6 +30,9 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(unique = true, nullable = false)
+    private String email;
 
     /** Nombre de usuario único utilizado para el inicio de sesión (generalmente el email). */
     @Column(unique = true)
@@ -37,6 +40,8 @@ public class Usuario {
 
     /** Contraseña encriptada del usuario. */
     private String password;
+    
+   
 
     /** * Conjunto de roles asignados al usuario.
      * Se utiliza FetchType.EAGER para cargar los roles inmediatamente junto con el usuario,
@@ -70,9 +75,10 @@ public class Usuario {
      * @param password Contraseña ya procesada/encriptada.
      * @param roles Conjunto inicial de roles.
      */
-    public Usuario(Long id, String username, String password, Set<Role> roles) {
+    public Usuario(Long id,String email, String username, String password, Set<Role> roles) {
         super();
         this.id = id;
+        this.email = email;
         this.username = username;
         this.password = password;
         this.roles = roles;
@@ -125,4 +131,13 @@ public class Usuario {
     public void setConfirmacionPassword(String confirmacionPassword) {
         this.confirmacionPassword = confirmacionPassword;
     }
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+    
 }

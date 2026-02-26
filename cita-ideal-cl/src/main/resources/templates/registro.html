@@ -47,13 +47,13 @@
 					<div class="card-body p-2">
 
 						<div th:if="${param.error}" class="alert alert-danger">Hubo
-							un error al registrar. El nombre de usuario podría ya existir.</div>
+							un error al registrar. El correo electrónico ya podría estar en uso.</div>
 
 						<form th:action="@{/registro}" th:object="${usuario}"
 							method="post">
 							<div class="d-grid">
-								<label for="username" class="form-label">Nombre de
-									Usuario</label> <input type="text" th:field="*{username}"
+								<label for="username" class="form-label">Correo Electronico
+								</label> <input type="email" th:field="*{email}"
 									class="form-control" id="username" required>
 							</div>
 

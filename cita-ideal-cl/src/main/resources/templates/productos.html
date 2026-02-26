@@ -26,6 +26,8 @@
 
 				<a href="/admin/planes" sec:authorize="hasRole('ADMIN')"
 					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
+				</a> <a href="/panel" sec:authorize="hasRole('USER')"
+					class="text-secondary me-3"> <i class="bi bi-grid-fill fs-5"></i>
 				</a> <a href="/carrito/ver" sec:authorize="hasRole('USER')"
 					class="btn btn-link text-dark position-relative p-0"> <i
 					class="bi bi-cart-fill fs-5"></i> <span
@@ -80,48 +82,53 @@
 		</div>
 
 		<div class="planes-wrapper">
-    <div class="row g-4 justify-content-center">
-        <div class="col-lg-4 col-md-6 reveal" th:each="plan : ${listadoDePlanes}">
-            <div class="card-flip-container">
-                <div class="card-flip-inner">
-                    
-                    <div class="card-front">
-                        <div class="img-container h-100 position-relative">
-                            <img th:src="${plan.imagenUrl != null} ? @{'/assets/img/planes/' + ${plan.imagenUrl}} : @{'/assets/img/default.jpg'}"
-                                 class="img-gallery w-100 h-100" style="object-fit: cover;" 
-                                 th:alt="${plan.nombre}">
-                            
-                            <div class="price-badge-floating">
-                                <span th:text="${plan.precioBase != null} ? '$' + ${#numbers.formatDecimal(plan.precioBase, 0, 'POINT', 0, 'COMMA')} : 'Consultar'"></span>
-                            </div>
-                            
-                            <div class="front-title-overlay">
-                                <h4 th:text="${plan.nombre}"></h4>
-                            </div>
-                        </div>
-                    </div>
+			<div class="row g-4 justify-content-center">
+				<div class="col-lg-4 col-md-6 reveal"
+					th:each="plan : ${listadoDePlanes}">
+					<div class="card-flip-container">
+						<div class="card-flip-inner">
 
-                    <div class="card-back d-flex flex-column justify-content-center p-4">
-                        <h4 class="fw-bold text-white mb-2" th:text="${plan.nombre}"></h4>
-                        <div class="divider mb-3"></div>
-                        
-                        <p class="card-text text-white small flex-grow-1 overflow-auto" 
-                           th:text="${plan.descripcion}"></p>
+							<div class="card-front">
+								<div class="img-container h-100 position-relative">
+									<img
+										th:src="${plan.imagenUrl != null} ? @{${plan.imagenUrl}} : @{'/assets/img/default.jpg'}"
+										class="img-gallery w-100 h-100" style="object-fit: cover;"
+										th:alt="${plan.nombre}">
 
-                        <div class="mt-4">
-                            <a th:href="@{/carrito/agregar/{id}(id=${plan.id})}"
-                               class="btn btn-light px-5 shadow-sm"> 
-                               <i class="bi bi-heart-fill me-2 text-danger"></i>Reservar
-                            </a>
-                        </div>
-                        <p class="mt-3 text-white-50" style="font-size: 0.7rem;">Click para volver</p>
-                    </div>
+									<div class="price-badge-floating">
+										<span
+											th:text="${plan.precioBase != null} ? '$' + ${#numbers.formatDecimal(plan.precioBase, 0, 'POINT', 0, 'COMMA')} : 'Consultar'"></span>
+									</div>
 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+									<div class="front-title-overlay">
+										<h4 th:text="${plan.nombre}"></h4>
+									</div>
+								</div>
+							</div>
+
+							<div
+								class="card-back d-flex flex-column justify-content-center p-4">
+								<h4 class="fw-bold text-white mb-2" th:text="${plan.nombre}"></h4>
+								<div class="divider mb-3"></div>
+
+								<p class="card-text text-white small flex-grow-1 overflow-auto"
+									th:text="${plan.descripcion}"></p>
+
+								<div class="mt-4">
+									<a th:href="@{/carrito/agregar/{id}(id=${plan.id})}"
+										class="btn btn-light px-5 shadow-sm"> <i
+										class="bi bi-heart-fill me-2 text-danger"></i>Reservar
+									</a>
+								</div>
+								<p class="mt-3 text-white-50" style="font-size: 0.7rem;">Click
+									para volver</p>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<footer th:replace="~{admin/fragments :: footer}"></footer>

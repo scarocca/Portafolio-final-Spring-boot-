@@ -50,9 +50,11 @@ public class DataInitializer implements CommandLineRunner {
 
         // 2. CREACIÓN DE USUARIO ADMINISTRADOR INICIAL (Opcional pero recomendado)
         // Esto te permite entrar a la sección de admin de inmediato
-        if (usuarioRepository.findByUsername("admin").isEmpty()) {
+        String emailAdmin = "admin@tucitaideal.cl";
+        if (usuarioRepository.findByUsername(emailAdmin).isEmpty()) {
             Usuario admin = new Usuario();
-            admin.setUsername("admin");
+            admin.setEmail(emailAdmin);
+            admin.setUsername(emailAdmin);
             // Seteamos la contraseña "admin123" cifrada
             admin.setPassword(passwordEncoder.encode("admin123"));
 
@@ -63,7 +65,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.añadirRol(adminRole);
             
             usuarioRepository.save(admin);
-            System.out.println("Usuario 'admin' creado con contraseña 'admin123'.");
+            System.out.println("Usuario '" + emailAdmin + "' creado con contraseña 'admin123'.");
         }
     }
 }

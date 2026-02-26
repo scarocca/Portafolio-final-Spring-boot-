@@ -46,11 +46,16 @@ public class UsuarioService {
      */
     public void registrarUsuarioPublico(Usuario usuario) {
         
-        // Validación de negocio: Coincidencia de contraseñas
+    	if (usuarioRepo.existsByEmail(usuario.getEmail())) {
+            throw new IllegalArgumentException("El correo electrónico ya está registrado.");
+        }
+       
+    	// Validación de negocio: Coincidencia de contraseñas
         if (usuario.getConfirmacionPassword() == null || 
                 !usuario.getPassword().equals(usuario.getConfirmacionPassword())) {
             throw new IllegalArgumentException("Las contraseñas no coinciden");
         }
+        usuario.setUsername(usuario.getEmail());
 
         // 1. Cifrar password utilizando el algoritmo BCrypt
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));

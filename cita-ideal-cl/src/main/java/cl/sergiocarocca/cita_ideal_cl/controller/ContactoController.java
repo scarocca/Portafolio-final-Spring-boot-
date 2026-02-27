@@ -1,14 +1,17 @@
 package cl.sergiocarocca.cita_ideal_cl.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cl.sergiocarocca.cita_ideal_cl.entity.Consulta;
+import cl.sergiocarocca.cita_ideal_cl.entity.Usuario;
 import cl.sergiocarocca.cita_ideal_cl.repository.ConsultaRepository;
 import cl.sergiocarocca.cita_ideal_cl.service.PlanService;
+import cl.sergiocarocca.cita_ideal_cl.service.UsuarioService;
 
 /**
  * Controlador encargado de gestionar las interacciones del formulario de contacto.
@@ -25,6 +28,9 @@ public class ContactoController {
     
     @Autowired
     private PlanService planService;
+    
+    @Autowired
+    private UsuarioService usuarioService;
 
     /**
      * Procesa y almacena una nueva consulta enviada por un usuario.
@@ -42,6 +48,7 @@ public class ContactoController {
                                    @RequestParam String email,
                                    @RequestParam(required = false) Long planId,
                                    @RequestParam String mensaje,
+                                   Authentication auth, // <-- Agregamos Authentication para saber quién está logueado
                                    RedirectAttributes redirect) {
         
         Consulta nuevaConsulta = new Consulta();
@@ -49,15 +56,25 @@ public class ContactoController {
         nuevaConsulta.setEmail(email);
         nuevaConsulta.setMensaje(mensaje);
 
-        // Si seleccionó un plan, lo buscamos y lo asociamos
+        // --- LÓGICA DE VINCULACIÓN AUTOMÁTICA ---
+        if (auth != null && auth.isAuthenticated()) {
+            // Buscamos al usuario por el email de la sesión activa
+            Usuario usuarioLogueado = usuarioService.obtenerPorEmail(auth.getName());
+            if (usuarioLogueado != null) {
+                nuevaConsulta.setUsuario(usuarioLogueado);
+                // Opcional: forzar que el email de la consulta sea el del usuario registrado
+                nuevaConsulta.setEmail(usuarioLogueado.getEmail()); 
+            }
+        }
+        // ----------------------------------------
+
         if (planId != null && planId != 0) {
             nuevaConsulta.setPlan(planService.buscarPorId(planId));
         }
 
         consultaRepository.save(nuevaConsulta);
 
-        // Mensaje de éxito para el usuario
-        redirect.addFlashAttribute("mensajeExito", "¡Gracias! Tu consulta ha sido enviada. Te contactaremos pronto.");
+        redirect.addFlashAttribute("mensajeExito", "¡Gracias! Tu consulta ha sido enviada.");
         
         return "redirect:/";
     }

@@ -42,3 +42,8 @@ main {
 	background: #ffd700;
 	border-radius: 8px;
 }
+.chat-container {
+    display: flex;
+    flex-direction: column-reverse; /* Los mensajes nuevos aparecerán abajo y se verá el final */
+    overflow-y: auto;
+}

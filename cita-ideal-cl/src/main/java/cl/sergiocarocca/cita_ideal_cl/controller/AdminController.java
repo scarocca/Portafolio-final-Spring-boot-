@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cl.sergiocarocca.cita_ideal_cl.entity.Consulta;
+import cl.sergiocarocca.cita_ideal_cl.entity.MensajeChat;
 import cl.sergiocarocca.cita_ideal_cl.entity.Reserva;
 import cl.sergiocarocca.cita_ideal_cl.entity.Usuario;
 import cl.sergiocarocca.cita_ideal_cl.repository.ConsultaRepository;
+import cl.sergiocarocca.cita_ideal_cl.service.ChatService;
 import cl.sergiocarocca.cita_ideal_cl.service.ConsultaService;
 import cl.sergiocarocca.cita_ideal_cl.service.ReservaService;
 import cl.sergiocarocca.cita_ideal_cl.service.UsuarioService;
@@ -35,6 +38,7 @@ public class AdminController {
     private final ReservaService reservaService;
     private final UsuarioService usuarioService;
     private final ConsultaService consultaService;
+    private final ChatService chatService;
     /**
      * Constructor para la inyección de dependencias.
      * * @param consultaRepository Repositorio para la gestión de consultas de contacto.
@@ -42,12 +46,13 @@ public class AdminController {
      * @param usuarioService Servicio para la gestión de cuentas de usuario.
      */
     public AdminController(ConsultaRepository consultaRepository, ReservaService reservaService,
-            UsuarioService usuarioService,ConsultaService consultaService) {
+            UsuarioService usuarioService,ConsultaService consultaService,ChatService chatService) {
         super();
         this.consultaRepository = consultaRepository;
         this.reservaService = reservaService;
         this.usuarioService = usuarioService;
         this.consultaService = consultaService;
+        this.chatService = chatService;
     }
 
     /**
@@ -116,14 +121,40 @@ public class AdminController {
         return "redirect:/admin/usuarios";
     }
     @PostMapping("/consultas/responder")
-    public String responder(@RequestParam Long consultaId, @RequestParam String respuesta, RedirectAttributes flash) {
+    public String responder(@RequestParam Long consultaId, @RequestParam String contenido, RedirectAttributes flash) {
+        // 1. Buscamos la consulta original
         Consulta consulta = consultaService.buscarPorId(consultaId);
-        consulta.setRespuesta(respuesta);
-        consulta.setFechaRespuesta(LocalDateTime.now());
         
-        consultaService.guardar(consulta);
+        // 2. Creamos el nuevo mensaje para el historial del chat
+        MensajeChat mensaje = new MensajeChat();
+        mensaje.setContenido(contenido);
+        mensaje.setConsulta(consulta);
+        mensaje.setEsAdmin(true); // Marcamos que lo envía el soporte
+        mensaje.setFechaEnvio(LocalDateTime.now());
         
-        flash.addFlashAttribute("mensajeExito", "¡Respuesta guardada con éxito!");
-        return "redirect:/admin/consultas"; // Ajusta a tu ruta real de listado
+        // 3. Guardamos el mensaje usando el ChatService
+        chatService.guardarMensaje(mensaje);
+        
+        // 4. (Opcional) Actualizamos el estado en la consulta principal si lo deseas
+        // consulta.setRespuesta(contenido); 
+        // consultaService.guardar(consulta);
+
+        flash.addFlashAttribute("mensajeExito", "¡Respuesta enviada al chat con éxito!");
+        return "redirect:/admin/consultas";
+    }
+    @PostMapping("/admin/consultas/responder")
+    public String responderDesdeAdmin(@RequestParam Long consultaId, 
+                                      @RequestParam String contenido, 
+                                      Authentication auth) {
+        Consulta consulta = consultaService.buscarPorId(consultaId);
+        
+        MensajeChat mensaje = new MensajeChat();
+        mensaje.setContenido(contenido);
+        mensaje.setConsulta(consulta);
+        mensaje.setEsAdmin(true); // Siempre true porque estamos en el AdminController
+        
+        chatService.guardarMensaje(mensaje);
+        
+        return "redirect:/admin/consultas?exito";
     }
 }

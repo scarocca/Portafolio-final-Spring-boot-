@@ -2,6 +2,8 @@ package cl.sergiocarocca.cita_ideal_cl.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entidad que representa una consulta de contacto enviada por un usuario.
@@ -48,6 +50,10 @@ public class Consulta {
     private String respuesta;
 
     private LocalDateTime fechaRespuesta;
+    
+ // Dentro de Consulta.java
+    @OneToMany(mappedBy = "consulta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MensajeChat> mensajes = new ArrayList<>();
 
     /**
      * Método de ciclo de vida de JPA.
@@ -131,6 +137,14 @@ public class Consulta {
 
 	public void setFechaRespuesta(LocalDateTime fechaRespuesta) {
 		this.fechaRespuesta = fechaRespuesta;
+	}
+
+	public List<MensajeChat> getMensajes() {
+		return mensajes;
+	}
+
+	public void setMensajes(List<MensajeChat> mensajes) {
+		this.mensajes = mensajes;
 	}
 	
     

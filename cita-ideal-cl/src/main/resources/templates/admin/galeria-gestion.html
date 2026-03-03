@@ -31,8 +31,7 @@
 								<tr th:each="foto : ${fotos}">
 									<td class="ps-4">
 										<div class="img-thumbnail-wrapper">
-											<img th:src="@{'/assets/img/galeria/' + ${foto.archivo}}"
-												class="img-thumbnail-admin"
+											<img th:src="${foto.archivo}" class="img-thumbnail-admin"
 												style="width: 80px; height: 50px; object-fit: cover;">
 										</div>
 									</td>

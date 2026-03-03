@@ -58,6 +58,7 @@ public class Plan {
 
     /** * Ruta o nombre del archivo de imagen que ilustra el plan. 
      */
+    @Column(name = "imagen", length = 1024)
     private String imagenUrl;
     
     /**

@@ -85,8 +85,9 @@ public class SecurityConfig {
      * proteger las credenciales contra ataques de fuerza bruta.
      * * @return Una instancia de BCryptPasswordEncoder.
      */
+    
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); 
+    BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

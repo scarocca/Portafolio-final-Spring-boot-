@@ -25,6 +25,7 @@ public class Foto {
     /** * Nombre del archivo físico almacenado en el servidor (ej: "uuid_imagen.jpg").
      * No almacena el contenido binario, solo la ruta/nombre referencial.
      */
+    @Column(length = 1024)
     private String archivo; 
 
     /** Fecha y hora exacta en la que se subió la imagen al sistema. */

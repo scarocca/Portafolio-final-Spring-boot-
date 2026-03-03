@@ -19,102 +19,120 @@ import java.util.UUID;
 /**
  * Controlador administrativo para la gestión de la galería de imágenes.
  * Proporciona endpoints para subir nuevas fotografías, eliminarlas del sistema
- * y visualizar el listado de archivos multimedia gestionados.
- * * @author Sergio Carocca
+ * y visualizar el listado de archivos multimedia gestionados. * @author Sergio
+ * Carocca
+ * 
  * @version 1.0
  */
 @Controller
 @RequestMapping("/admin/galeria")
 public class AdminGaleriaController {
 
-    @Autowired
-    private FotoService fotoService;
+	@Autowired
+	private FotoService fotoService;
 
-    /**
-     * Muestra la interfaz del formulario para la carga de nuevas imágenes.
-     * * @return El nombre de la plantilla HTML para el formulario de subida.
-     */
-    @GetMapping("/nuevo")
-    public String formularioSubida() {
-        return "admin/galeria-subir";
-    }
+	/**
+	 * Muestra la interfaz del formulario para la carga de nuevas imágenes.
+	 * * @return El nombre de la plantilla HTML para el formulario de subida.
+	 */
+	@GetMapping("/nuevo")
+	public String formularioSubida() {
+		return "admin/galeria-subir";
+	}
 
-    /**
-     * Procesa la subida de una imagen, genera un identificador único para el archivo,
-     * lo almacena en el sistema de archivos local y registra la información en la base de datos.
-     * * @param titulo El título descriptivo de la fotografía.
-     * @param archivo El objeto MultipartFile que contiene los datos binarios de la imagen.
-     * @param flash Atributos para mensajes de retroalimentación (éxito/error) tras la redirección.
-     * @return Redirección a la vista de gestión o al formulario en caso de error.
-     */
-    @PostMapping("/guardar")
-    public String guardarFoto(@RequestParam String titulo,
-                             @RequestParam("archivoImagen") MultipartFile archivo,
-                             RedirectAttributes flash) {
-        
-        if (archivo.isEmpty()) {
-            flash.addFlashAttribute("error", "Por favor, selecciona un archivo.");
-            return "redirect:/admin/galeria/nuevo";
-        }
+	/**
+	 * Procesa la subida de una imagen, genera un identificador único para el
+	 * archivo, lo almacena en el sistema de archivos local y registra la
+	 * información en la base de datos. * @param titulo El título descriptivo de la
+	 * fotografía.
+	 * 
+	 * @param archivo El objeto MultipartFile que contiene los datos binarios de la
+	 *                imagen.
+	 * @param flash   Atributos para mensajes de retroalimentación (éxito/error)
+	 *                tras la redirección.
+	 * @return Redirección a la vista de gestión o al formulario en caso de error.
+	 */
+	@PostMapping("/guardar")
+	public String guardarFoto(@RequestParam String titulo,
+			@RequestParam(value = "archivoImagen", required = false) MultipartFile archivo,
+			@RequestParam(value = "urlImagen", required = false) String urlImagen, RedirectAttributes flash) {
 
-        try {
-            // 1. Definir la ruta relativa al proyecto
-            String carpetaRelativa = "src/main/resources/static/assets/img/galeria/";
-            String nombreUnico = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
-            
-            // 2. Obtener la ruta absoluta completa para que Java no se pierda
-            Path rutaAbsoluta = Paths.get(carpetaRelativa).toAbsolutePath();
-            
-            // Crear la carpeta si no existe (por seguridad)
-            if (!Files.exists(rutaAbsoluta)) {
-                Files.createDirectories(rutaAbsoluta);
-            }
+		// 1. Validación inicial: ¿Viene al menos una de las dos opciones?
+		boolean tieneArchivo = (archivo != null && !archivo.isEmpty());
+		boolean tieneUrl = (urlImagen != null && !urlImagen.isBlank());
 
-            // 3. Escribir el archivo físicamente
-            byte[] bytes = archivo.getBytes();
-            Path rutaArchivoFinal = rutaAbsoluta.resolve(nombreUnico);
-            Files.write(rutaArchivoFinal, bytes);
+		if (!tieneArchivo && !tieneUrl) {
+			flash.addFlashAttribute("error", "Debes seleccionar un archivo o proporcionar una URL.");
+			return "redirect:/admin/galeria/nuevo";
+		}
 
-            // 4. Guardar en Base de Datos (solo el nombre del archivo)
-            Foto nuevaFoto = new Foto();
-            nuevaFoto.setTitulo(titulo);
-            nuevaFoto.setArchivo(nombreUnico);
-            fotoService.guardar(nuevaFoto);
+		try {
+			Foto nuevaFoto = new Foto();
+			nuevaFoto.setTitulo(titulo);
 
-            flash.addFlashAttribute("success", "¡Foto subida con éxito!");
+			// 2. Lógica de Decisión
+			if (tieneUrl) {
+				// CASO A: Es una URL externa
+				nuevaFoto.setArchivo(urlImagen);
+			} else {
+				// CASO B: Es un archivo físico (tu lógica original)
+				String carpetaRelativa = "src/main/resources/static/assets/img/galeria/";
+				String nombreUnico = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            flash.addFlashAttribute("error", "Error crítico al guardar: " + e.getMessage());
-        }
+				Path rutaAbsoluta = Paths.get(carpetaRelativa).toAbsolutePath();
 
-        return "admin/galeria-gestion";
-    }
+				if (!Files.exists(rutaAbsoluta)) {
+					Files.createDirectories(rutaAbsoluta);
+				}
 
-    /**
-     * Elimina una fotografía tanto del registro en la base de datos como del almacenamiento físico.
-     * * @param id El identificador único de la foto a eliminar.
-     * @param flash Atributos para enviar mensajes de confirmación de eliminación.
-     * @return Redirección a la lista de gestión de galería.
-     */
-    @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
-        fotoService.eliminarFotoCompleta(id);
-        flash.addFlashAttribute("success", "La foto y su archivo han sido eliminados.");
-        return "redirect:/admin/galeria/gestion"; 
-    }
+				byte[] bytes = archivo.getBytes();
+				Path rutaArchivoFinal = rutaAbsoluta.resolve(nombreUnico);
+				Files.write(rutaArchivoFinal, bytes);
 
-    /**
-     * Carga y muestra el panel de gestión con todas las imágenes registradas.
-     * * @param model Objeto para inyectar la lista de fotos y estadísticas en la vista.
-     * @return El nombre de la plantilla HTML para la gestión de la galería.
-     */
-    @GetMapping("/gestion")
-    public String gestionarGaleria(Model model) {
-        // Reutilizamos el servicio para traer todas las fotos
-        model.addAttribute("fotos", fotoService.listarTodas());
-        // También pasamos el total para el contador del Sidebar si lo usas
-        model.addAttribute("totalFotos", fotoService.listarTodas().size());
-        return "admin/galeria-gestion";
-    }
+				nuevaFoto.setArchivo(nombreUnico);
+			}
+
+			// 3. Guardar en Base de Datos
+			fotoService.guardar(nuevaFoto);
+			flash.addFlashAttribute("success", "¡Imagen guardada con éxito!");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			flash.addFlashAttribute("error", "Error crítico al guardar: " + e.getMessage());
+			return "redirect:/admin/galeria/nuevo";
+		}
+
+		return "redirect:/admin/galeria/gestion";
+	}
+
+	/**
+	 * Elimina una fotografía tanto del registro en la base de datos como del
+	 * almacenamiento físico. * @param id El identificador único de la foto a
+	 * eliminar.
+	 * 
+	 * @param flash Atributos para enviar mensajes de confirmación de eliminación.
+	 * @return Redirección a la lista de gestión de galería.
+	 */
+	@GetMapping("/eliminar/{id}")
+	public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
+		fotoService.eliminarFotoCompleta(id);
+		flash.addFlashAttribute("success", "La foto y su archivo han sido eliminados.");
+		return "redirect:/admin/galeria/gestion";
+	}
+
+	/**
+	 * Carga y muestra el panel de gestión con todas las imágenes registradas.
+	 * * @param model Objeto para inyectar la lista de fotos y estadísticas en la
+	 * vista.
+	 * 
+	 * @return El nombre de la plantilla HTML para la gestión de la galería.
+	 */
+	@GetMapping("/gestion")
+	public String gestionarGaleria(Model model) {
+		// Reutilizamos el servicio para traer todas las fotos
+		model.addAttribute("fotos", fotoService.listarTodas());
+		// También pasamos el total para el contador del Sidebar si lo usas
+		model.addAttribute("totalFotos", fotoService.listarTodas().size());
+		return "admin/galeria-gestion";
+	}
 }

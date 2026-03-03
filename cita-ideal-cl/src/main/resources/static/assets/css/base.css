@@ -47,3 +47,52 @@ main {
     flex-direction: column-reverse; /* Los mensajes nuevos aparecerán abajo y se verá el final */
     overflow-y: auto;
 }
+/* 1. Estilo para la imagen de Vista Previa */
+#imgPreview {
+    border-radius: 12px;
+    border: 2px dashed #dee2e6; /* Borde punteado gris por defecto */
+    padding: 5px;
+    transition: all 0.3s ease-in-out;
+    background-color: #fff;
+    object-fit: cover; /* Asegura que no se deforme si la imagen es cuadrada o rectangular */
+}
+
+/* 2. Feedback visual cuando la URL es válida (Verde) */
+#inputUrl.is-valid {
+    border-color: #198754;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* 3. Feedback visual cuando la URL es inválida (Rojo) */
+#inputUrl.is-invalid {
+    border-color: #dc3545;
+}
+
+/* 4. Efecto sutil al pasar el mouse sobre la vista previa */
+#imgPreview:hover {
+    transform: scale(1.02);
+    border-color: var(--deep-love); /* Usando tu variable de color personalizada */
+}
+
+/* 5. Contenedor de la vista previa para que no "salte" bruscamente */
+.preview-container {
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.preview-container {
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#imgPreview.loading {
+    display: none !important; /* Esconde la imagen mientras carga */
+}
